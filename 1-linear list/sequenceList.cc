@@ -64,8 +64,8 @@ public:
         return 0;
     }
 
-    bool listInsert(int index, DataType& element) {
-        if (index < 1 || listLength() == this->capacity) {
+    bool listInsert(int index, DataType element) {
+        if (index < 1 || index - 1 > listLength() || listLength() == this->capacity) {
             return false;
         }
         this->array[index - 1] = element;
@@ -122,13 +122,7 @@ private:
 
 int main()
 {
-    mySqlList list(10);
-    for (int i = 1; i <= 3; ++i) {
-        list.listInsert(i, i);
-    }
-    list.printList();
-    list.listDelete(1);
-    list.printList();
+    mySqlList list(8);
     system("pause");
     return 0;
 }
