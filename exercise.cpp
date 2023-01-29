@@ -1,15 +1,47 @@
 #include <iostream>
+#include <vector>
+#include <string.h>
+#include <set>
 using namespace std;
+#include <algorithm>
+
+class MyCompare {
+public:
+    bool operator()(int a, int b) const
+    {
+        return a > b;
+    }
+};
+void test()
+{
+    set<int> s;
+    s.insert(20);
+    s.insert(40);
+    s.insert(50);
+    s.insert(30);
+    s.insert(10);
+    set<int, MyCompare>s2;  //仿函数  重载小括号()
+    s2.insert(40);
+    s2.insert(50);
+    s2.insert(20);
+    s2.insert(30);
+    s2.insert(10);
+    for (set<int, MyCompare>::iterator it = s2.begin(); it != s2.end(); ++it) {
+        cout << *it << ' ';
+    }
+    cout << endl;
+
+
+}
 int main()
 {
-    int N, i;
-    cin >> N;
-    for(i = 1; ; i++){
-        N -= i;
-        if(N <= 0)
-            break;
-    } // 最后输出的i 是层数
-
+    // binary_search
+    // test();
+    vector<string> msg {"hello", "C++", "World"};
+    for(const string& word : msg){
+        cout << word << ' ';
+    }
+    cout << endl;
     system("pause");
     return 0;
 }
