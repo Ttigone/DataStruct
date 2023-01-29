@@ -30,18 +30,30 @@ void test()
         cout << *it << ' ';
     }
     cout << endl;
-
+    
 
 }
+    inline float max_fun(int a) {
+        cout << a;
+        return a;
+    }
 int main()
 {
     // binary_search
     // test();
-    vector<string> msg {"hello", "C++", "World"};
-    for(const string& word : msg){
-        cout << word << ' ';
-    }
-    cout << endl;
+    // vector<string> msg {"hello", "C++", "World"};
+    // for(const string& word : msg){
+    //     cout << word << ' ';
+    // }
+    // cout << endl;
+    // int a (10);
+    // cout << a;
+    // size_t b = sizeof(a);
+    // cout << b;
+    // auto a = 2;
+    // cout << a;
+    // max_fun(a);
+    
     system("pause");
     return 0;
 }
