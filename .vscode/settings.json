@@ -128,6 +128,7 @@
 
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
     "C_Cpp.clang_format_style": "Google",
+    // "C_Cpp.errorSquiggles": "disabled",
     
     // cmake tools
     // "cmake.cmakePath": "cmake",

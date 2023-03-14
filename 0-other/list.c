@@ -20,11 +20,11 @@ int sizeList(Node head);
 void printList(Node head);
 int main()
 {
-    struct ListNode head;
-    iniList(&head);
+    // struct ListNode head;
+    // iniList(&head);
 
-    printList(&head);
-    printf("%d", sizeList(&head));
+    // printList(&head);
+    // printf("%d", sizeList(&head));
     system("pause");
     return 0;
 }

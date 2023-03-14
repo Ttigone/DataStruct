@@ -123,6 +123,8 @@ private:
 int main()
 {
     mySqlList list(8);
+    unsigned int aa = -11;
+    cerr << aa << endl;
     system("pause");
     return 0;
 }
