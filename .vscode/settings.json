@@ -114,10 +114,6 @@
         "@copyright Copyright (c) {year} C3H3_Ttigone"
     ],
 
-    // C/C++
-    "C_Cpp.default.cppStandard": "c++17",
-    "C_Cpp.default.cStandard": "c17",
-
     "C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
     "C_Cpp.inlayHints.parameterNames.enabled": true,
     "C_Cpp.inlayHints.parameterNames.hideLeadingUnderscores": false,
@@ -126,8 +122,8 @@
     "C_Cpp.inlayHints.referenceOperator.enabled": true,
     "C_Cpp.inlayHints.referenceOperator.showSpace": true,
 
-    "C_Cpp.clang_format_path": "/usr/bin/clang-format",
-    "C_Cpp.clang_format_style": "Google",
+    // "C_Cpp.clang_format_path": "/usr/bin/clang-format",
+    // "C_Cpp.clang_format_style": "Google",
     // "C_Cpp.errorSquiggles": "disabled",
     
     // cmake tools
