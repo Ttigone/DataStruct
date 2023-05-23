@@ -1,0 +1,5 @@
+E:/MyWorkSpace/vscode-structdata/build/CMakeFiles/edit_cache.dir
+E:/MyWorkSpace/vscode-structdata/build/CMakeFiles/rebuild_cache.dir
+E:/MyWorkSpace/vscode-structdata/build/src/CMakeFiles/a.dir
+E:/MyWorkSpace/vscode-structdata/build/src/CMakeFiles/edit_cache.dir
+E:/MyWorkSpace/vscode-structdata/build/src/CMakeFiles/rebuild_cache.dir

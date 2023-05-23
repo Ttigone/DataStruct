@@ -13,7 +13,7 @@
     "editor.fontLigatures": true,
     "editor.lineHeight": 1.6,
     // VsCode Icon
-    "workbench.iconTheme": "vscode-icons",
+    "workbench.iconTheme": "material-icon-theme",
     "vsicons.presets.jsOfficial": true,
     "vsicons.presets.tsOfficial": true,
     "workbench.productIconTheme": "fluent-icons",
