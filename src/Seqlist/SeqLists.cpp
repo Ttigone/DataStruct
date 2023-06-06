@@ -1,13 +1,4 @@
-#ifndef _SEQLIST__HPP_
-#define _SEQLIST__HPP_
-
-#include <iostream>
-#include <string>
-
-using std::cin;
-using std::cout;
-using std::endl;
-constexpr int MAXSIZE = 100;
+#include "SeqLists.h"
 
 namespace my_seqlist {
     template <class ElemType>
@@ -182,5 +173,3 @@ namespace my_seqlist {
     };
 }
 
-
-#endif
