@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
 
-project(test
+project(ds
     VERSION         0.0.1
     DESCRIPTION     "cmake project of Data-Struct"
     HOMEPAGE_URL    "https://github.com/Ttigone/DataStruct"
@@ -58,27 +58,28 @@ set(TEST_TOP_BINARY_DIR          ${CMAKE_CURRENT_BINARY_DIR})
      message(STATUS "Configuring on/for ${CMAKE_SYSTEM_NAME}")
  endif()
 
+include(GNUInstallDirs)
+include(GenerateExportHeader)
+
+add_subdirectory(src) #  这行代码搜索 src 文件夹，执行
+# add_subdirectory(src/Seqlist)
+
  include (TestBigEndian)
  test_big_endian(IS_BIG_ENDIAN)
+
+
+
  if(IS_BIG_ENDIAN)
      message(STATUS "Configuring on/for BIG_ENDIAN")
  else()
      message(STATUS "Configuring on/for LITTLE_ENDIAN")
  endif()
 
- include(GNUInstallDirs)
- include(GenerateExportHeader)
 
-
-
- if(BUILD_TESTING AND PROJECT_IS_TOP_LEVEL)
-     add_subdirectory(test)
- endif()
-
- install(FILES ${CMAKE_CURRENT_BINARY_DIR}/test_build_info.h
-     DESTINATION
-         ${CMAKE_INSTALL_INCLUDEDIR}
- )
+#  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/test_build_info.h
+#      DESTINATION
+#          ${CMAKE_INSTALL_INCLUDEDIR}
+#  )
 
 
 

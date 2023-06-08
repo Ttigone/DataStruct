@@ -1,6 +1,64 @@
-#include "SeqLists.h"
+// #ifndef _SEQLIST__HPP_
+// #define _SEQLIST__HPP_
 
-namespace my_seqlist {
+// #include <iostream>
+// #include <string>
+
+// using std::cin;
+// using std::cout;
+// using std::endl;
+// constexpr int MAXSIZE = 100;
+
+// namespace my_seqlist {
+//     template <class ElemType>
+//     class SeqList {
+//     public:
+//         SeqList(); 
+//     public:
+//         SeqList(const ElemType* target, int n);  // 有参构造   n 代表 a 中前多少个元素被复制
+//         int Length() const noexcept; 
+//         bool Empty() const; 
+//         void Clear();
+//         // void Traverse(void (*visitr)(const ElemType &)) const; 
+//         void Traverse() const; 
+//         ElemType GetElem(int position, ElemType &e) const; 
+//         bool SetElem(int position, const ElemType &e); 
+//         int Locate(const ElemType& parameter);   // 返回定位的位置  二分搜索
+//         // 有序数组, 才能用二分搜索
+//         void Insert(int position, const ElemType& x);  // 在第 i 个位置插入元素，其余元素后移动 
+//         void Delete(int position, ElemType &e); 
+//         void Delete(int position);    // 不返回删除的元素
+//         void Delete_Element(const ElemType &element); 
+//         void Detele_repeated_element() noexcept;   // 无序表
+//         ~SeqList();
+//     private:
+//         ElemType data[MAXSIZE];
+//         int length = 0;
+//     };
+// }
+
+// #include "SeqLists.cpp"
+
+
+// template class SeqList<int>;
+// template ElemType SeqList<int>(const int* target, int n);
+
+
+// #endif  // _SEQLIST__HPP_
+
+
+
+#ifndef _SEQLIST__HPP_
+#define _SEQLIST__HPP_
+
+#include <iostream>
+#include <string>
+
+using std::cin;
+using std::cout;
+using std::endl;
+constexpr int MAXSIZE = 100;
+
     template <class ElemType>
     class SeqList {
     public:
@@ -24,8 +82,11 @@ namespace my_seqlist {
         void Clear() {
 
         }
-        void Traverse(void (*visitr)(const ElemType &)) const {
-
+        void Traverse() const {
+            for (auto i = 0; i < Length(); ++i) {
+                cout << data[i] << " ";
+            }
+            cout << endl;
         }
         ElemType GetElem(int position, ElemType &e) const {
             if (position < 1 || position > Length()) {
@@ -36,7 +97,7 @@ namespace my_seqlist {
         bool SetElem(int position, const ElemType &e) {
             return true;
         }
-        int Locate(const ElemType& parameter, int a = 0) {  // 返回定位的位置  二分搜索
+        int Locate(const ElemType& parameter) {  // 返回定位的位置  二分搜索
             // unsigned int left = a;
             // unsigned int right = length;
             // while (left <= right) {
@@ -88,7 +149,7 @@ namespace my_seqlist {
             }
             data[length--] = 0;
         }
-        void Delete_Element(const ElemType &element, int label = 0) {
+        void Delete_Element(const ElemType &element) {
 //***********************************************************************//
 //  双指针法,并未改变原有数据顺序,但仍保留在数组中
             int slow_point = 0;
@@ -171,5 +232,8 @@ namespace my_seqlist {
         ElemType data[MAXSIZE];
         int length = 0;
     };
-}
 
+
+template class SeqList<int>;
+
+#endif
