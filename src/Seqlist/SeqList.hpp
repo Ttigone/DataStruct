@@ -49,16 +49,23 @@ parameter: none
 return: true is empty false is no empty
 */
     bool Empty() const {
-        return true;
+        if(!Length()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 /*
-funtion: 清空顺序表
+funtion: 清空顺序表, 长度变为 0
 parameter: none
 return: none
 */
     void Clear() {
-
+        for (auto &i : data) {
+            i = 0;
+        }
+        this->length = 0;
     }
 
 /*
@@ -91,15 +98,18 @@ parameter: position-指定位置 e-设定的元素
 return: true is successful false is faild
 */
     bool SetElem(int position, const ElemType &e) {
-        return true;
+        if (position < 1 || position > Length()) {
+            return false;
+        }
+        e = data[position - 1];
     }
     
 /*
 funtion: 根据指定元素定位，首个元素位置
 parameter: 定位元素
-return: 返回位置
+return: 返回位置  没有查找到就返回 0
 */
-    int Locate(const ElemType& parameter) {  // 返回定位的位置  二分搜索
+    int Locate(const ElemType &e) {  // 返回定位的位置  二分搜索
         // unsigned int left = a;
         // unsigned int right = length;
         // while (left <= right) {
@@ -114,7 +124,7 @@ return: 返回位置
         // }
         // return 0;   // 没有找到就返回 0
         for (int i = 0; i < Length(); ++i) {
-            if (data[i] == parameter) {
+            if (data[i] == e) {
                 return i + 1;
             }
         }
@@ -127,17 +137,17 @@ parameter: position-插入位置 e-插入的元素
 return: none
 */
     void Insert(int position, const ElemType& e) {  // 在第 i 个位置插入元素，其余元素后移动 
-        if (length > MAXSIZE - 1) {        // 存储结构满了
+        if (this->length > MAXSIZE - 1) {        // 存储结构满了
             throw "sorry! Storage space of full";
         }
         if (position < 1 || position > length + 1) {    // 存储结构的顺序反映了数据的顺序
             throw "arg is invalid"; 
         }
-        for (auto j = length; j > position - 1; --j) {
+        for (auto j = this->length; j > position - 1; --j) {
             data[j] = data[j - 1];
         }
-        data[position - 1] = x;
-        ++length;
+        data[position - 1] = e;
+        ++this->length;
     }
 
 /*
@@ -149,6 +159,7 @@ return: none
         if (position < 1 || position > length) {
             throw "arg is invaild";
         }
+        e = data[position - 1];
         for (auto j = length; position < j; ++position) {
             data[position - 1] = data[position];
         }
@@ -175,13 +186,13 @@ funtion: 删除顺序表中连续的重复的元素
 parameter: none
 return: none
 */
-    void Delete_Element() {
+    void Delete_Element(const ElemType &e) {
 //***********************************************************************//
 //  双指针法,并未改变原有数据顺序,但仍保留在数组中
         int slow_point = 0;
         int fast_point = 0;
         for (; fast_point < this->length; ++fast_point) {
-            if (element != data[fast_point]) {
+            if (e != data[fast_point]) {
                 data[slow_point++] = data[fast_point];
             }
         }
