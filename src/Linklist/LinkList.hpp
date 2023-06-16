@@ -15,11 +15,11 @@ struct Node {
 template<class ElemType>
 class LinkList {
 public:
-    LinkList() { length = 0;}
+    LinkList() : m_length(0) {}
     ~LinkList() { delete[] first;}
 private:
     Node<ElemType> *first;  
-    size_t length;
+    size_t m_length;
 public:
 /*
 funtion: 复制一个数组变为一个链表
@@ -40,7 +40,7 @@ parameter: none
 return: 长度 length 
 */
     int Length() const {
-        return length;
+        return this->length;
     }
 
 /*
@@ -49,7 +49,11 @@ parameter: none
 return: true is empty, false is no empty
 */
     bool Empty() const {
-
+        if (!Length()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 /*
@@ -58,9 +62,14 @@ parameter: none
 return: none 
 */
     void clear() {
-
+        auto p = first->next;
+        while (p) {
+            auto delete_point = p;
+            first->next = p->next;
+            delete delete_point;
+            delete_point = nullptr;
+        }
     }
-
 
 /*
 funtion: 根据位置获取元素, 通过 e 获得
@@ -85,7 +94,15 @@ parameter: position-位置 e-赋值的元素
 return: true is successful, false is faild
 */
     bool SetElem(int position, const ElemType &e) {
-
+        if (position < 1 ||  position > Length()) {
+            return false;
+        }
+        auto p = first->next;
+        while (--position){
+            p = p->next;   
+        }
+        p->data = e;
+        return true;
     }
 
 /*
@@ -112,9 +129,19 @@ funtion: 向链表中插入元素
 parameter: positon-插入的位置，e-插入的元素
 return: true is successful false is faild 
 */
-    bool Insert(int position, ElemType e) {
-        auto p = first->next;
-
+    bool Insert(int position, const ElemType &e) {
+        if (position < 1 || position > Length() + 1) {
+            return false;
+        }
+        auto p = first;
+        while (--position) {
+            p = p->next;
+        }
+        decltype(p) p_front {nullptr};
+        p_front->data = e;
+        p_front->next = p->next;
+        p->next = p_front;
+        return true;
     }
 
 /*
@@ -123,7 +150,18 @@ parameter: position-删除位置
 return: true is successful, false is faild
 */
     bool Delete(int position) {
-
+        if (position < 1 || position > Length()) {
+            return false;
+        }
+        auto p = first;
+        while (--position) {
+            p = p->next;
+        }
+        decltype(p) Delete_p = p->next;
+        p->next = Delete_p->next;
+        delete Delete_p;
+        Delete_p = nullptr;
+        return true;
     }
 
 /*
@@ -132,7 +170,19 @@ parameter: position-删除位置 e-删除的元素
 return: true is successful, false is faild
 */
     bool Delete(int position, ElemType &e) {
-
+        if (position < 1 || position > Length()) {
+            return false;
+        }
+        auto p = first;
+        while (--position) {
+            p = p->next;
+        }
+        decltype(p) Delete_p = p->next;
+        p->next = Delete_p->next;
+        delete Delete_p;
+        Delete_p = nullptr;
+        
+        return true;
     }
 
 /*

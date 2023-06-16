@@ -22,3 +22,13 @@ add_subdirectory(Deque)
 target_link_libraries(main PUBLIC Deque_header)
 install(FILES Deque.hpp DESTINATION Deque/)
 target_include_directories(main INTERFACE "$<TARGET_PROPERTY:Deque_header,INTERFACE_INCLUDE_DIRECTORIES>") 
+
+add_subdirectory(String)
+target_link_libraries(main PUBLIC String_header)
+install(FILES String.hpp DESTINATION String/)
+target_include_directories(main INTERFACE "$<TARGET_PROPERTY:String_header,INTERFACE_INCLUDE_DIRECTORIES>") 
+
+add_subdirectory(Tree)
+target_link_libraries(main PUBLIC Tree_header)
+install(FILES Binary_Tree.hpp DESTINATION Tree/)
+target_include_directories(main INTERFACE "$<TARGET_PROPERTY:Tree_header,INTERFACE_INCLUDE_DIRECTORIES>") 

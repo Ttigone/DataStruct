@@ -4,9 +4,9 @@
 #include <set>
 #include <string>
 #include <vector>
-#include "Seqlist/SeqList.hpp"
+// #include "Seqlist/SeqList.hpp"
 #include <algorithm>
-// #include "Linklist/LinkList.hpp"
+#include "Linklist/LinkList.hpp"
 // #include "Stack/Stack.hpp"
 // #include "Deque/Deque.hpp"
 using namespace std;
