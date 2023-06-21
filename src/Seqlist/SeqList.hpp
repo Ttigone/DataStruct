@@ -17,7 +17,7 @@ public:
     ~SeqList() = default;
 private:
     ElemType data[MAXSIZE];
-    int length = 0;
+    int m_length = 0;
 public:
 /*
 funtion: 有参构造函数，赋值
@@ -31,7 +31,7 @@ return:none
         for (int i = 0; i < n; ++i) {
             data[i] = target[i];
         }
-        length = n;
+        m_length = n;
     }
 
 /*
@@ -39,8 +39,8 @@ funtion: 获取长度
 parameter: none
 return: 长度
 */
-    int Length() const noexcept {
-        return length;
+    int length() const noexcept {
+        return m_length;
     }
 
 /*
@@ -48,8 +48,8 @@ funtion: 判断是否为空
 parameter: none
 return: true is empty false is no empty
 */
-    bool Empty() const {
-        if(!Length()) {
+    bool empty() const {
+        if(!length()) {
             return true;
         } else {
             return false;
@@ -61,11 +61,11 @@ funtion: 清空顺序表, 长度变为 0
 parameter: none
 return: none
 */
-    void Clear() {
+    void clear() {
         for (auto &i : data) {
             i = 0;
         }
-        this->length = 0;
+        this->m_length = 0;
     }
 
 /*
@@ -73,8 +73,8 @@ funtion: 遍历输出顺序表
 parameter: none
 return: none
 */
-    void Traverse() const {
-        for (auto i = 0; i < Length(); ++i) {
+    void traverse() const {
+        for (auto i = 0; i < length(); ++i) {
             cout << data[i] << " ";
         }
         cout << endl;
@@ -85,8 +85,8 @@ funtion: 获取指定位置的元素
 parameter: position-指定位置  e-存储元素
 return: none
 */
-    ElemType GetElem(int position, ElemType &e) const {
-        if (position < 1 || position > Length()) {
+    ElemType get_elem(int position, ElemType &e) const {
+        if (position < 1 || position > length()) {
             throw "arg is invaild";
         }
         return data[position - 1];
@@ -97,8 +97,8 @@ funtion: 为指定位置设定元素
 parameter: position-指定位置 e-设定的元素
 return: true is successful false is faild
 */
-    bool SetElem(int position, const ElemType &e) {
-        if (position < 1 || position > Length()) {
+    bool set_elem(int position, const ElemType &e) {
+        if (position < 1 || position > length()) {
             return false;
         }
         e = data[position - 1];
@@ -109,7 +109,7 @@ funtion: 根据指定元素定位，首个元素位置
 parameter: 定位元素
 return: 返回位置  没有查找到就返回 0
 */
-    int Locate(const ElemType &e) {  // 返回定位的位置  二分搜索
+    int locate(const ElemType &e) {  // 返回定位的位置  二分搜索
         // unsigned int left = a;
         // unsigned int right = length;
         // while (left <= right) {
@@ -123,7 +123,7 @@ return: 返回位置  没有查找到就返回 0
         //     }
         // }
         // return 0;   // 没有找到就返回 0
-        for (int i = 0; i < Length(); ++i) {
+        for (int i = 0; i < length(); ++i) {
             if (data[i] == e) {
                 return i + 1;
             }
@@ -136,18 +136,18 @@ funtion: 向顺序表中插入元素
 parameter: position-插入位置 e-插入的元素
 return: none
 */
-    void Insert(int position, const ElemType& e) {  // 在第 i 个位置插入元素，其余元素后移动 
-        if (this->length > MAXSIZE - 1) {        // 存储结构满了
+    void insert(int position, const ElemType& e) {  // 在第 i 个位置插入元素，其余元素后移动 
+        if (this->m_length > MAXSIZE - 1) {        // 存储结构满了
             throw "sorry! Storage space of full";
         }
-        if (position < 1 || position > length + 1) {    // 存储结构的顺序反映了数据的顺序
+        if (position < 1 || position > length() + 1) {    // 存储结构的顺序反映了数据的顺序
             throw "arg is invalid"; 
         }
-        for (auto j = this->length; j > position - 1; --j) {
+        for (auto j = this->m_length; j > position - 1; --j) {
             data[j] = data[j - 1];
         }
         data[position - 1] = e;
-        ++this->length;
+        ++this->m_length;
     }
 
 /*
@@ -155,15 +155,15 @@ funtion: 删除指定位置的元素
 parameter: position-删除的位置 e-存储删除的元素
 return: none
 */
-    void Delete(int position, ElemType &e) {
+    void delete(int position, ElemType &e) {
         if (position < 1 || position > length) {
             throw "arg is invaild";
         }
         e = data[position - 1];
-        for (auto j = length; position < j; ++position) {
+        for (auto j = length(); position < j; ++position) {
             data[position - 1] = data[position];
         }
-        data[length--] = 0;
+        data[m_length--] = 0;
     }
     
 /*
@@ -171,14 +171,14 @@ funtion: 删除指定位置的元素
 parameter: position-删除的位置 
 return: none
 */
-    void Delete(int position) {   // 不返回删除的元素
-        if (position < 1 || position > length) {
+    void delete(int position) {   // 不返回删除的元素
+        if (position < 1 || position > length()) {
             throw "arg is invaild";
         }
-        for (auto j = length; position < j; ++position) {
+        for (auto j = length(); position < j; ++position) {
             data[position - 1] = data[position];
         }
-        data[length--] = 0;
+        data[m_length--] = 0;
     }
 
 /*
@@ -186,19 +186,19 @@ funtion: 删除顺序表中连续的重复的元素
 parameter: none
 return: none
 */
-    void Delete_Element(const ElemType &e) {
+    void delete_element(const ElemType &e) {
 //***********************************************************************//
 //  双指针法,并未改变原有数据顺序,但仍保留在数组中
         int slow_point = 0;
         int fast_point = 0;
-        for (; fast_point < this->length; ++fast_point) {
+        for (; fast_point < this->m_length; ++fast_point) {
             if (e != data[fast_point]) {
                 data[slow_point++] = data[fast_point];
             }
         }
         cout  << slow_point;
         cout << '\n' << data[0] << " " << data[1];
-        this->length = slow_point + 1;
+        this->m_length = slow_point + 1;
         // if (label) {
         //     PrintList();
         // }
@@ -236,7 +236,7 @@ funtion: 删除顺序表中重复的元素（可不连续）
 parameter: none
 return: none
 */
-    void Detele_repeated_element() noexcept {  // 无序表
+    void detele_repeated_element() noexcept {  // 无序表
         for (int i = 0; i < Length(); ++i) {
             for (int j = i + 1; j < Length(); ++j) {
                 if (data[i] == data[j]) {
@@ -245,7 +245,7 @@ return: none
             }
         }
     }
-    // void Merge(SeqList<ElemType> &L1, SeqList<ElemType> &L2, SeqList<ElemType> &L3) {
+    // void merge(SeqList<ElemType> &L1, SeqList<ElemType> &L2, SeqList<ElemType> &L3) {
     //     int i = 1, j = 1, k = 1;
     //     int n1 = L1.Length();
     //     int n2 = L2.Length();

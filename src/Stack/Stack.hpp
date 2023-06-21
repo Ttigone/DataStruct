@@ -25,7 +25,7 @@ funtion: 返回链表长度
 parameter: none
 return: 长度 length 
 */
-        int Length() const {
+        int length() const {
 
         }
     
@@ -34,7 +34,7 @@ funtion: 判断栈是否为空
 parameter: none
 return: true is empty false is no empty
 */
-        void Empty() const {
+        void empty() const {
 
         }
 
@@ -43,7 +43,7 @@ funtion: 清空栈
 parameter: none
 return: none
 */
-        void Clear() {
+        void clear() {
 
         }
 
@@ -52,7 +52,7 @@ funtion: 入栈
 parameter: 入栈元素 
 return: none 
 */
-        void Push(const ElemType &e) {
+        void push(const ElemType &e) {
 
         }
     
@@ -61,7 +61,7 @@ funtion: 出栈
 parameter: 存储出栈元素
 return: true is successful false is faild
 */
-        bool Pop(const ElemType &e) {
+        bool pop(const ElemType &e) {
 
         }
     
@@ -70,7 +70,7 @@ funtion: 出栈
 parameter: none
 return: true is successful false is faild 
 */
-        bool Pop() {
+        bool pop() {
 
         }
 
@@ -79,7 +79,7 @@ funtion: 获取栈顶元素
 parameter: none
 return: 栈顶元素
 */
-        ElemType GetTop() {
+        ElemType get_top() {
 
         }
 

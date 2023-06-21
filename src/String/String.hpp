@@ -23,7 +23,7 @@ namespace my_String {
     parameter: target-目标串 source-源串
     return: none
     */
-        void Copy(CharString &target, const CharString &source) {
+        void copy(CharString &target, const CharString &source) {
 
         }
 
@@ -32,7 +32,7 @@ namespace my_String {
     parametet: none
     return: true is empty false is no empty
     */
-        bool Empty() const {
+        bool empty() const {
 
         }
     
@@ -41,7 +41,7 @@ namespace my_String {
     parameter: none
     return: 字符个数
     */
-        int Length() const {
+        int length() const {
 
         }
     
@@ -50,7 +50,7 @@ namespace my_String {
     parameter: target-目标字符串 source-源字符串
     return: none
     */
-        void Concat(CharString &target, const CharString &source) {
+        void concat(CharString &target, const CharString &source) {
 
         }
 
@@ -59,7 +59,7 @@ namespace my_String {
     parameter: s-字符串 pos-位置 len-长度
     return: none
     */
-        CharString SubString(const CharString &s, int pos, int len) {
+        CharString sub_string(const CharString &s, int pos, int len) {
 
         }
 
@@ -68,7 +68,7 @@ namespace my_String {
     parameter: target-目标串 pos-位置 pattern-匹配字符串
     return: 获取的位置
     */
-        int Index(const CharString &target, const CharString &pattern, int pos = 0) {
+        int index(const CharString &target, const CharString &pattern, int pos = 0) {
 
         }
     };

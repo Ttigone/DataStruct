@@ -3,6 +3,7 @@
         "xstring": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "iostream": "cpp"
     }
 }
