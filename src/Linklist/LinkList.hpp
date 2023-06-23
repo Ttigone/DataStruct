@@ -46,7 +46,7 @@ funtion: 返回链表长度
 parameter: none
 return: 长度 length 
 */
-    int length() const {
+    int size() const {
         return this->m_length;
     }
 
@@ -56,7 +56,7 @@ parameter: none
 return: true is empty, false is no empty
 */
     bool empty() const {
-        if (!length()) {
+        if (!size()) {
             return true;
         } else {
             return false;
@@ -145,7 +145,7 @@ return: true is successful, false is faild
         */
         // way 2
         // /*
-            if (position < 1 || position > length()) {
+            if (position < 1 || position > size()) {
                 return false;
             }
             get_elem(position) = element;
@@ -178,7 +178,7 @@ parameter: positon-插入的位置，e-插入的元素
 return: true is successful false is faild 
 */
     bool insert(int position, const ElemType &e) {
-        if (position < 1 || position > length() + 1) {
+        if (position < 1 || position > size() + 1) {
             return false;
         }
         auto p = first;
@@ -199,7 +199,7 @@ parameter: position-删除位置
 return: true is successful, false is faild
 */
     bool delete_element(int position) {
-        if (position < 1 || position > length()) {
+        if (position < 1 || position > size()) {
             return false;
         }
         auto p = first;
@@ -220,7 +220,7 @@ parameter: position-删除位置 element-删除的元素
 return: true is successful, false is faild
 */
     bool delete_element(int position, ElemType &element) {
-        if (position < 1 || position > length()) {
+        if (position < 1 || position > size()) {
             return false;
         }
         auto p = first;

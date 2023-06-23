@@ -3,35 +3,70 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 using std::cin;
 using std::cout;
 using std::endl;
-constexpr int MAXSIZE = 100;
 
 
 template <class ElemType>
 class SeqList {
-public:
-    SeqList() {length = 0;}
-    ~SeqList() = default;
 private:
-    ElemType data[MAXSIZE];
-    int m_length = 0;
+    ElemType *data;
+    int m_length;
+    int max_size;
 public:
 /*
 funtion: 有参构造函数，赋值
 parameter: target-目标数组的指针 n-赋值个数
 return:none
 */
-    SeqList(const ElemType* target, int n) { 
-        if (n > MAXSIZE) {
-            throw "args is invaild";
+    // SeqList(const ElemType* target, int n) { 
+    //     if (n > MAXSIZE) {
+    //         throw "args is invaild";
+    //     }
+    //     for (int i = 0; i < n; ++i) {
+    //         data[i] = target[i];
+    //     }
+    //     m_length = n;
+    // }
+
+/*
+funtion: 构造函数 
+parameter: 默认值  
+return:none
+*/
+    SeqList(int init_size = 10) { 
+        if (init_size <= 0) {
+            throw new std::logic_error("size error");
         }
-        for (int i = 0; i < n; ++i) {
-            data[i] = target[i];
+        max_size = init_size;
+        data = new ElemType[max_size];
+        m_length = 0;
+    }
+/*
+funtion: 拷贝构造函数
+parameter: 拷贝目标
+return:none
+*/
+    SeqList(SeqList &s) {
+        max_size = s.max_size;
+        m_length = s.m_length;
+        data = new ElemType[max_size];
+        for (int i = 0; i < m_length; ++i) {
+            data[i] = s.data[i];
         }
-        m_length = n;
+    }
+
+/*
+funtion: 析构函数
+parameter: none
+return: none
+*/
+    ~SeqList() {
+        delete [] data;
+        data = nullptr;
     }
 
 /*
@@ -39,8 +74,43 @@ funtion: 获取长度
 parameter: none
 return: 长度
 */
-    int length() const noexcept {
+    int size() const noexcept {
         return m_length;
+    }
+
+/*
+funtion: 设置当前有效长度
+parameter: none
+return: 长度的引用
+*/
+    int& set_size() {
+        return m_length;
+    }
+
+/*
+funtion: 获取可存储的最大长度
+parameter: none
+return: 可存储最大长度
+*/
+    int m_size() const noexcept {
+        return max_size;
+    }
+
+/*
+funtion: 重新分配长度
+parameter: none
+return: none
+*/
+    void resize() noexcept {
+        std::vector<ElemType> copy;
+        for (int i = 0; i < size(); ++i) {
+            copy.push_back(data[i]);
+        }
+        max_size = max_size + max_size / 2;
+        data = new ElemType[max_size];
+        for (int t = 0; t < size(); ++t) {
+            data[t] = copy[t];
+        }
     }
 
 /*
@@ -49,7 +119,7 @@ parameter: none
 return: true is empty false is no empty
 */
     bool empty() const {
-        if(!length()) {
+        if(!size()) {
             return true;
         } else {
             return false;
@@ -62,10 +132,13 @@ parameter: none
 return: none
 */
     void clear() {
-        for (auto &i : data) {
-            i = 0;
+        // for (auto &i : data) {
+        //     i = 0;
+        // }
+        for (int i = 0; i < size(); ++i) {
+            data[i] = 0;
         }
-        this->m_length = 0;
+        set_size() = 0;
     }
 
 /*
@@ -74,34 +147,48 @@ parameter: none
 return: none
 */
     void traverse() const {
-        for (auto i = 0; i < length(); ++i) {
+        cout << "output element: ";
+        for (auto i = 0; i < size(); ++i) {
             cout << data[i] << " ";
         }
         cout << endl;
     }
-    
+
+/*
+funtion: 逆置顺序表
+parameter: none
+return: none
+*/   
+    void inverse() {
+        auto s = size();
+        for (int i = 0; i < s / 2; ++i) {
+            std::swap(data[i], data[s - 1 - i]);
+        }
+    }
+
 /*
 funtion: 获取指定位置的元素
 parameter: position-指定位置  e-存储元素
 return: none
 */
-    ElemType get_elem(int position, ElemType &e) const {
-        if (position < 1 || position > length()) {
+    void get_elem(int position, ElemType &e) const {
+        if (position < 1 || position > size()) {
             throw "arg is invaild";
         }
-        return data[position - 1];
+        e = data[position - 1];
     }
     
 /*
 funtion: 为指定位置设定元素
-parameter: position-指定位置 e-设定的元素
+parameter: position-指定位置 element-设定的元素
 return: true is successful false is faild
 */
-    bool set_elem(int position, const ElemType &e) {
-        if (position < 1 || position > length()) {
+    bool set_elem(int position, const ElemType &element) {
+        if (position < 1 || position > size()) {
             return false;
         }
-        e = data[position - 1];
+        data[position - 1] = element;
+        return true;
     }
     
 /*
@@ -123,7 +210,7 @@ return: 返回位置  没有查找到就返回 0
         //     }
         // }
         // return 0;   // 没有找到就返回 0
-        for (int i = 0; i < length(); ++i) {
+        for (int i = 0; i < size(); ++i) {
             if (data[i] == e) {
                 return i + 1;
             }
@@ -137,17 +224,17 @@ parameter: position-插入位置 e-插入的元素
 return: none
 */
     void insert(int position, const ElemType& e) {  // 在第 i 个位置插入元素，其余元素后移动 
-        if (this->m_length > MAXSIZE - 1) {        // 存储结构满了
+        if (size() > max_size - 1) {        // 存储结构满了
             throw "sorry! Storage space of full";
         }
-        if (position < 1 || position > length() + 1) {    // 存储结构的顺序反映了数据的顺序
+        if (position < 1 || position > size() + 1) {    // 存储结构的顺序反映了数据的顺序
             throw "arg is invalid"; 
         }
-        for (auto j = this->m_length; j > position - 1; --j) {
+        for (auto j = size(); j > position - 1; --j) {
             data[j] = data[j - 1];
         }
         data[position - 1] = e;
-        ++this->m_length;
+        ++set_size();
     }
 
 /*
@@ -155,15 +242,15 @@ funtion: 删除指定位置的元素
 parameter: position-删除的位置 e-存储删除的元素
 return: none
 */
-    void delete(int position, ElemType &e) {
-        if (position < 1 || position > length) {
+    void delete_position(int position, ElemType &e) {
+        if (position < 1 || position > size()) {
             throw "arg is invaild";
         }
         e = data[position - 1];
-        for (auto j = length(); position < j; ++position) {
+        for (auto j = size(); position < j; ++position) {
             data[position - 1] = data[position];
         }
-        data[m_length--] = 0;
+        data[set_size()--] = 0;
     }
     
 /*
@@ -171,14 +258,14 @@ funtion: 删除指定位置的元素
 parameter: position-删除的位置 
 return: none
 */
-    void delete(int position) {   // 不返回删除的元素
-        if (position < 1 || position > length()) {
+    void delete_position(int position) {   // 不返回删除的元素
+        if (position < 1 || position > size()) {
             throw "arg is invaild";
         }
-        for (auto j = length(); position < j; ++position) {
+        for (auto j = size(); position < j; ++position) {
             data[position - 1] = data[position];
         }
-        data[m_length--] = 0;
+        data[set_size()--] = 0;
     }
 
 /*
@@ -196,13 +283,13 @@ return: none
                 data[slow_point++] = data[fast_point];
             }
         }
-        cout  << slow_point;
-        cout << '\n' << data[0] << " " << data[1];
-        this->m_length = slow_point + 1;
+        // cout  << slow_point;
+        // cout << '\n' << data[0] << " " << data[1];
+        set_size() = slow_point;
         // if (label) {
         //     PrintList();
         // }
-        cout << fast_point - slow_point;
+        // cout << fast_point - slow_point;
 
 //***********************************************************//
 
@@ -232,44 +319,39 @@ return: none
     }
     
 /*
-funtion: 删除顺序表中重复的元素（可不连续）
-parameter: none
+funtion: 合并两个顺序表   前提是两个顺序表的非递减的
+parameter: 
 return: none
 */
-    void detele_repeated_element() noexcept {  // 无序表
-        for (int i = 0; i < Length(); ++i) {
-            for (int j = i + 1; j < Length(); ++j) {
-                if (data[i] == data[j]) {
-                    Delete(j + 1);
-                }
-            }
+    bool merge(SeqList<ElemType> &merge_target) {
+        int m, n, k, i, j;
+        m = size();
+        n = merge_target.size();
+        k = m + n - 1;
+        i = m - 1, j = n - 1;
+        while (m + n > m_size()) {
+            resize();
         }
+        while(i >= 0 && j >= 0) {
+            if (data[i] >= merge_target.data[j]) {
+                data[k--] = data[i--];
+            } else {
+                data[k--] = merge_target.data[j--];
+            }
+            while(j >= 0) {
+                data[k--] = merge_target.data[j--];
+            }
+            set_size() = m + n;
+        }
+        return true;
     }
-    // void merge(SeqList<ElemType> &L1, SeqList<ElemType> &L2, SeqList<ElemType> &L3) {
-    //     int i = 1, j = 1, k = 1;
-    //     int n1 = L1.Length();
-    //     int n2 = L2.Length();
-    //     while (i <= n2 && j <= n2) {
-    //         if (Get(i) <= Get(j)) {
-    //             L3.Insert(k, Get(i));
-    //             ++i;
-    //         } else {
-    //             L3.Insert(k, Get(j));
-    //             ++j;
-    //         }
-    //         k++;
-    //     }
-    //     while (i <= n1) {
-    //         L3.Insert(k, Get(i));
-    //         ++i;
-    //         ++k;
-    //     }
-    //     while (j <= n2) {
-    //         L3.Insert(k, Get(j));
-    //         ++j;
-    //         ++k;
-    //     }
-    // }
+
+    void operator [](int i) {
+        return data[i - 1];
+    }
+
+
+
 };
 // template class SeqList<int>;
 
