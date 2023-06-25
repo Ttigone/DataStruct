@@ -8,9 +8,9 @@
 #include <algorithm>
 
 
-#include "Seqlist/SeqList.hpp"
+// #include "Seqlist/SeqList.hpp"
 // #include "Linklist/LinkList.hpp"
-// #include "Stack/Stack.hpp"
+#include "Stack/Stack.hpp"
 // #include "Deque/Deque.hpp"
 
 using namespace std;
@@ -19,13 +19,21 @@ int main()
 {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
-    SeqList<int> a(8);
-    for (int i = 0; i < 5; ++i) {
-        a.insert(i + 1, i);
-    }
-    a.insert(3, 4);
-    a.traverse();
-    a.delete_element(4);
-    a.traverse();
+    my_stack::Stack<int> s(5);
+    s.push(1);
+    s.push(2);
+    s.push(3);
+    s.push(4);
+    s.push(5);
+    s.push(6);
+    s.push(9);
+    s.push(2);
+    s.push(2);
+    s.push(4);
+    s.push(6);
+    s.push(1);
+    s.push(0);
+    s.push(8);
+    s.traverse();
     return 0;
 }

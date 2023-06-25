@@ -13,34 +13,34 @@ struct Node {
     Node<ElemType> *next;
 };
 
-
 namespace mylist {
 template<class ElemType>
 class LinkList {
+private:
+    Node<ElemType> *head_point;  
+    size_t m_length;
+
 public:
-    LinkList() : m_length(0), first(new Node<ElemType>) {first->next = nullptr;}
+    LinkList() : m_length(0), head_point(new Node<ElemType>) {head_point->next = nullptr;}
 /*
 funtion: 复制一个数组变为一个链表
 pargamer: ElemType a[]:数组的指针 ;  n: 复制的个数
 return: none
 */
-    LinkList(ElemType target_[], int n) : m_length(0), first(new Node<ElemType>) {   // BUG 自动结束
-        // auto p = first->next;
+    LinkList(ElemType target_[], int n) : m_length(0), head_point(new Node<ElemType>) {   // BUG 自动结束
+        // auto p = head_point->next;
         // for (int i = 0; i < n; ++i) {
         //     p->data = target_[i];
         //     p = p->next;
         // }
-        first->next = nullptr;
+        head_point->next = nullptr;
         for (int i = 0; i < n; ++i) {
             insert(i + 1, target_[i]);
         }
     }
-    ~LinkList() { delete[] first;}
-private:
-    Node<ElemType> *first;  
-    size_t m_length;
-public:
+    ~LinkList() { delete[] head_point;}
 
+public:
 /*
 funtion: 返回链表长度
 parameter: none
@@ -78,10 +78,10 @@ return: none
 
 
         // way 2
-            auto p = first->next;
+            auto p = head_point->next;
             while (p) {
                 auto delete_point = p;
-                first->next = p->next;
+                head_point->next = p->next;
                 p = p->next;
                 delete delete_point;
                 delete_point = nullptr;
@@ -95,7 +95,7 @@ parameter: 位置-position element-存储元素
 return: 获取是否成功, 元素是否存在
 */
     bool get_elem(int position, ElemType &element) const {
-        auto p = first->next;
+        auto p = head_point->next;
         while (--position && p != NULL) {
             p = p->next;
         }
@@ -114,7 +114,7 @@ parameter: 位置-position
 return: 返回 数据域的引用 , 没有找到则抛出异常 
 */
     ElemType& get_elem(int position) const {
-        auto p = first->next;
+        auto p = head_point->next;
         while (--position && p != NULL) {
             p = p->next;
         }
@@ -136,7 +136,7 @@ return: true is successful, false is faild
             if (position < 1 ||  position > length()) {
                 return false;
             }
-            auto p = first->next;
+            auto p = head_point->next;
             while (--position){
                 p = p->next;   
             }
@@ -159,7 +159,7 @@ parameter: 传入元素
 return: 找到的位置,若找不到，则返回 0 
 */
     int locate(ElemType x) {
-        auto p = first->next;
+        auto p = head_point->next;
         unsigned int i = 0;
         while (p != NULL) {
             ++i;
@@ -181,7 +181,7 @@ return: true is successful false is faild
         if (position < 1 || position > size() + 1) {
             return false;
         }
-        auto p = first;
+        auto p = head_point;
         while (--position) {
             p = p->next;
         }
@@ -202,7 +202,7 @@ return: true is successful, false is faild
         if (position < 1 || position > size()) {
             return false;
         }
-        auto p = first;
+        auto p = head_point;
         while (--position) {
             p = p->next;
         }
@@ -223,7 +223,7 @@ return: true is successful, false is faild
         if (position < 1 || position > size()) {
             return false;
         }
-        auto p = first;
+        auto p = head_point;
         while (--position) {
             p = p->next;
         }
@@ -241,17 +241,18 @@ parameter: none
 return: none
 */
     void traverse() {   
-        auto p = first->next;
+        auto p = head_point->next;
         while (p != NULL) {
             cout << p->data << " ";
             p = p->next;
         }
         cout << endl;
     }
+
+
 };
 
 }
-
 // template class LinkList<int>;
 
 

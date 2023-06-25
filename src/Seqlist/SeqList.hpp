@@ -10,6 +10,7 @@ using std::cout;
 using std::endl;
 
 
+namespace myseq {
 template <class ElemType>
 class SeqList {
 private:
@@ -351,8 +352,8 @@ return: none
     }
 
 
-
 };
 // template class SeqList<int>;
+}
 
 #endif
