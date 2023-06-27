@@ -8,8 +8,7 @@ using std::cout;
 using std::endl;
 
 template <class ElemType>
-class QNode {
-private:
+struct QNode {
     ElemType data;
     QNode *next;
 };
@@ -29,9 +28,10 @@ funtion: 默认构造函数
 parameter: none
 return: none
 */
-    Deque() : m_length(0), head_point(new QNode<ElemType>) 
-                           tail_point(new QNode<ElemType>)
-            { head_point0->next = tail_point->next = nullptr; }
+    Deque() : m_length(0), 
+              head_point(new QNode<ElemType>),
+              tail_point(new QNode<ElemType>)
+            { head_point->next = tail_point->next = nullptr; }
     
 /*
 funtion: 析构函数
@@ -51,6 +51,15 @@ parameter: none
 return: 长度
 */
     int size() const {
+        return m_length;
+    }
+
+/*
+funtion: 设置当前长度
+parameter: none
+return: none
+*/
+    int& set_size() {
         return m_length;
     }
 
@@ -76,7 +85,11 @@ return: none
         QNode<ElemType> *clear_point = new QNode<ElemType>;
         clear_point = head_point->next;
         while (clear_point != tail_point->next) {   
-
+            auto delete_point = clear_point;
+            head_point->next = clear_point->next;
+            clear_point = head_point->next;
+            delete delete_point;
+            delete_point = nullptr;
         }
     }
 
@@ -88,7 +101,7 @@ return: none
     void traverse() const {
         QNode<ElemType> *traverse_point = new QNode<ElemType>;       
         traverse_point = head_point->next;
-        while (traverse_point != tail_point->next) {
+        while (traverse_point != nullptr) {
             cout << "head ";
             cout << traverse_point->data;
             if (traverse_point != tail_point) {
@@ -96,6 +109,7 @@ return: none
             }
             traverse_point = traverse_point->next;
         }
+        cout << "tail";
     }
 
 /*
@@ -104,7 +118,7 @@ parameter: element-存储值
 return: true is successful false is faild
 */
     bool out_queue(ElemType &element) {
-        if (head_point->next == tail_point->next) {
+        if (!size()) {
             throw new std::logic_error("size error");
         }
         QNode<ElemType> delete_point = new QNode<ElemType>;
@@ -122,7 +136,7 @@ parameter: none
 return: true is successful false is faild
 */
     bool out_queue() {
-        if (head_point->next == tail_point->next) {
+        if (!size()) {
             throw new std::logic_error("size error");
         }
         QNode<ElemType> delete_point = new QNode<ElemType>;
@@ -139,7 +153,7 @@ parameter: element-存储元素
 return: true is successful false is faild
 */
     bool get_head(ElemType &element) const {
-        if (head_point->next == tail_point->next) {
+        if (!size()) {
             throw new std::logic_error("size error");
         }
         element = head_point->next->data;
@@ -154,8 +168,16 @@ return: true is successful false is faild
     bool in_queue(const ElemType &element){
         QNode<ElemType> *new_point = new QNode<ElemType>;
         new_point->data = element;
-        tail_point->next = new_point;
-        new_point->next = nullptr;
+        if (size() == 0) {
+            head_point->next = tail_point->next = new_point;
+            new_point->next = nullptr;
+            ++set_size();
+        } else {
+            new_point->next = (tail_point->next)->next; // BUG 入队
+            (tail_point->next)->next = new_point;
+            tail_point = new_point;
+            ++set_size();
+        }
         return true;
     }
 

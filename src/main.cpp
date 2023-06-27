@@ -10,8 +10,8 @@
 
 // #include "Seqlist/SeqList.hpp"
 // #include "Linklist/LinkList.hpp"
-#include "Stack/Stack.hpp"
-// #include "Deque/Deque.hpp"
+// #include "Stack/Stack.hpp"
+#include "Deque/Deque.hpp"
 
 using namespace std;
 
@@ -19,21 +19,14 @@ int main()
 {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
-    my_stack::Stack<int> s(5);
-    s.push(1);
-    s.push(2);
-    s.push(3);
-    s.push(4);
-    s.push(5);
-    s.push(6);
-    s.push(9);
-    s.push(2);
-    s.push(2);
-    s.push(4);
-    s.push(6);
-    s.push(1);
-    s.push(0);
-    s.push(8);
+    myqueue::Deque<int> s;
+    s.in_queue(1);
+    s.in_queue(4);
+    s.in_queue(2);
+    s.in_queue(1);
+    s.in_queue(2);
+    s.in_queue(6);
+    s.in_queue(0);
     s.traverse();
     return 0;
 }
