@@ -185,4 +185,6 @@ return: true is successful false is faild
 };
 
 }
+
+// template class Deque<ElemType> OK
 #endif

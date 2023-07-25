@@ -19,6 +19,11 @@ private:
     int max_size;
 public:
 /*
+funtion: 默认构造函数
+*/
+    SeqList() = default;
+
+/*
 funtion: 有参构造函数，赋值
 parameter: target-目标数组的指针 n-赋值个数
 return:none
@@ -34,9 +39,7 @@ return:none
     // }
 
 /*
-funtion: 构造函数 
-parameter: 默认值  
-return:none
+funtion: 有参构造函数 
 */
     SeqList(int init_size = 10) { 
         if (init_size <= 0) {
@@ -48,15 +51,11 @@ return:none
     }
 /*
 funtion: 拷贝构造函数
-parameter: 拷贝目标
-return:none
 */
-    SeqList(SeqList &s) {
-        max_size = s.max_size;
-        m_length = s.m_length;
+    SeqList(SeqList &copy) : max_size(copy.m_size), m_length(copy.m_length){
         data = new ElemType[max_size];
         for (int i = 0; i < m_length; ++i) {
-            data[i] = s.data[i];
+            data[i] = copy.data[i];
         }
     }
 
@@ -75,7 +74,7 @@ funtion: 获取长度
 parameter: none
 return: 长度
 */
-    int size() const noexcept {
+    constexpr int size() noexcept {
         return m_length;
     }
 
@@ -84,7 +83,7 @@ funtion: 设置当前有效长度
 parameter: none
 return: 长度的引用
 */
-    int& set_size() {
+    constexpr int& set_size() {
         return m_length;
     }
 
@@ -93,7 +92,7 @@ funtion: 获取可存储的最大长度
 parameter: none
 return: 可存储最大长度
 */
-    int m_size() const noexcept {
+    constexpr int m_size() noexcept {
         return max_size;
     }
 
@@ -119,7 +118,7 @@ funtion: 判断是否为空
 parameter: none
 return: true is empty false is no empty
 */
-    bool empty() const {
+    constexpr bool empty() const {
         if(!size()) {
             return true;
         } else {
@@ -353,7 +352,8 @@ return: none
 
 
 };
-// template class SeqList<int>;
+
 }
 
+// template class SeqList<ElemType> OK
 #endif

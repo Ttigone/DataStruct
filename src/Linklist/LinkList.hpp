@@ -27,17 +27,26 @@ funtion: 复制一个数组变为一个链表
 pargamer: ElemType a[]:数组的指针 ;  n: 复制的个数
 return: none
 */
-    LinkList(ElemType target_[], int n) : m_length(0), head_point(new Node<ElemType>) {   // BUG 自动结束
-        // auto p = head_point->next;
-        // for (int i = 0; i < n; ++i) {
-        //     p->data = target_[i];
-        //     p = p->next;
-        // }
+    LinkList(ElemType target_[], int n) : m_length(0), head_point(new Node<ElemType>) {
         head_point->next = nullptr;
         for (int i = 0; i < n; ++i) {
-            insert(i + 1, target_[i]);
+            insert(i + 1, target_[i]);  // 可能会造成越界
         }
     }
+
+/*
+funtion: 拷贝构造函数
+*/
+    LinkList(const LinkList<ElemType> &copy) : m_length(copy.m_length), head_point(new Node<ElemType>){
+        head_point->next = nullptr;
+        for (int i = 1; i <= copy.m_length; ++i) {
+            insert(i, copy.get_elem(i));
+        }
+    }
+
+/*
+funtion: 析构函数
+*/
     ~LinkList() { delete[] head_point;}
 
 public:
@@ -46,7 +55,7 @@ funtion: 返回链表长度
 parameter: none
 return: 长度 length 
 */
-    int size() const {
+    constexpr int size() const {
         return this->m_length;
     }
 
@@ -55,7 +64,7 @@ funtion: 判断链表是否为空
 parameter: none
 return: true is empty, false is no empty
 */
-    bool empty() const {
+    constexpr bool empty() const {
         if (!size()) {
             return true;
         } else {
@@ -253,8 +262,6 @@ return: none
 };
 
 }
-// template class LinkList<int>;
 
-
+// template class LinkList<ELemType> OK
 #endif
-

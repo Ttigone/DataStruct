@@ -166,4 +166,5 @@ return: none
 
 }
 
+// template class Stack<ElemType> OK
 #endif
