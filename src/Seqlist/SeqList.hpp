@@ -24,24 +24,9 @@ funtion: 默认构造函数
     SeqList() = default;
 
 /*
-funtion: 有参构造函数，赋值
-parameter: target-目标数组的指针 n-赋值个数
-return:none
-*/
-    // SeqList(const ElemType* target, int n) { 
-    //     if (n > MAXSIZE) {
-    //         throw "args is invaild";
-    //     }
-    //     for (int i = 0; i < n; ++i) {
-    //         data[i] = target[i];
-    //     }
-    //     m_length = n;
-    // }
-
-/*
 funtion: 有参构造函数 
 */
-    SeqList(int init_size = 10) { 
+    explicit SeqList(int init_size = 10) { 
         if (init_size <= 0) {
             throw new std::logic_error("size error");
         }
@@ -119,11 +104,7 @@ parameter: none
 return: true is empty false is no empty
 */
     constexpr bool empty() const {
-        if(!size()) {
-            return true;
-        } else {
-            return false;
-        }
+        return !size();
     }
 
 /*
@@ -132,9 +113,6 @@ parameter: none
 return: none
 */
     void clear() {
-        // for (auto &i : data) {
-        //     i = 0;
-        // }
         for (int i = 0; i < size(); ++i) {
             data[i] = 0;
         }
