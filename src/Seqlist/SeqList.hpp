@@ -68,7 +68,7 @@ return: none
         delete [] data;
         data = nullptr;
     }
-
+    
 /*
 funtion: 获取长度
 parameter: none

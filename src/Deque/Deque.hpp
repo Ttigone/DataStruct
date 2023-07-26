@@ -18,9 +18,9 @@ namespace myqueue {
 template <class ElemType>
 class Deque {
 private:
+    int m_length;
     QNode<ElemType> *head_point;
     QNode<ElemType> *tail_point;
-    int m_length;
 
 public:
 /*
@@ -30,8 +30,8 @@ return: none
 */
     Deque() : m_length(0), 
               head_point(new QNode<ElemType>),
-              tail_point(new QNode<ElemType>)
-            { head_point->next = tail_point->next = nullptr; }
+              tail_point(head_point)
+            { head_point->next = nullptr; }
     
 /*
 funtion: 析构函数
@@ -39,9 +39,14 @@ parameter: none
 return: none
 */
     ~Deque() {
-        delete head_point;
-        delete tail_point;
-        head_point = tail_point = nullptr;
+        if (head_point != tail_point) {
+            delete head_point;
+            delete tail_point;
+            head_point = tail_point = nullptr;
+        } else {
+            delete head_point;
+            head_point = tail_point = nullptr;
+        }
     }
     
 public:
