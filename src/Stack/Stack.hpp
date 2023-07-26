@@ -9,27 +9,34 @@ using std::cout;
 using std::endl;
 
 
-namespace my_stack {
+namespace mystack {
 template<class ElemType>
 class Stack {
 private:
-    ElemType *data;
     int m_top;
     int m_base;
     int max_size;
+    ElemType *data;
 public:
 /*
 funtion: 有参构造函数
 parameter: none
 return:none
 */
-    Stack(int init_size = 10) {
+    Stack(int init_size = 10) : m_top(0), m_base(0), max_size(init_size) {
         if (init_size <= 0) {
             throw new std::logic_error("size error");
         }
-        max_size = init_size;
         data = new ElemType[max_size];
-        m_top = m_base = 0;
+    }
+
+/*
+funtion: 拷贝构造函数
+*/
+    Stack(const Stack<ElemType> &copy) : m_top(0), m_base(0), max_size(copy.max_size) {
+        for (int i = 0; i < copy.size(); ++i) {
+            push(copy.data[i]);
+        }
     }
 
 /*
@@ -47,7 +54,7 @@ funtion: 返回链表长度
 parameter: none
 return: 长度 length 
 */
-    int size() const {
+    constexpr int size() const {
         return m_top - m_base;
     }
 
@@ -73,12 +80,8 @@ funtion: 判断栈是否为空
 parameter: none
 return: true is empty false is no empty
 */
-    bool empty() const {
-        if (!size()) {
-            return true;
-        } else {
-            return false;
-        }
+    constexpr bool empty() const {
+        return m_base == m_top;
     }
 
 /*
@@ -95,7 +98,7 @@ funtion: 入栈
 parameter: element-入栈元素 
 return: none 
 */
-    void push(const ElemType &element) {
+    void push(const ElemType element) {
         if (m_top - m_base == max_size) {
             // throw new std::logic_error("size full error");
             // 追加空间
@@ -123,12 +126,11 @@ funtion: 出栈
 parameter: none
 return: true is successful false is faild 
 */
-    bool pop() {
-        if (m_top == m_base) {
-            return false;
+    ElemType pop() {
+        if (empty()) {
+            throw new std::logic_error("empty");
         }
-        --m_top;
-        return true;
+        return data[--m_top];
     }
 
 /*

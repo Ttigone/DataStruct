@@ -34,6 +34,20 @@ return: none
             { head_point->next = nullptr; }
     
 /*
+funtion: 拷贝构造函数  // 深拷贝
+*/
+    Deque(const Deque<ElemType> &copy) : Deque() {   // 委托构造
+        head_point->next = nullptr; 
+        QNode<ElemType> *copy_point = (copy.head_point)->next;
+        if (!copy_point) {
+        } else {
+            for (int i = 0; i < copy.m_length; ++i) {
+                in_queue(copy_point->data);   // 会增加长度
+                copy_point = copy_point->next;
+            }  // 最后 copy_point 是 nullptr
+        }
+    }   
+/*
 funtion: 析构函数
 parameter: none
 return: none
@@ -55,16 +69,7 @@ funtion: 获取长度
 parameter: none
 return: 长度
 */
-    int size() const {
-        return m_length;
-    }
-
-/*
-funtion: 设置当前长度
-parameter: none
-return: none
-*/
-    int& set_size() {
+    constexpr int size() const {
         return m_length;
     }
 
@@ -73,12 +78,8 @@ funtion: 判断队列是否为空
 parameter: none
 return: true is empty false is no empty
 */
-    bool empty() const {
-        if (!m_length) {
-            return true;
-        } else {
-            return false;
-        }
+    constexpr bool empty() const {
+        return m_length == 0;
     }
 
 /*
@@ -89,13 +90,15 @@ return: none
     void clear() {  // NOTE  逐步释放队列中的元素
         QNode<ElemType> *clear_point = new QNode<ElemType>;
         clear_point = head_point->next;
-        while (clear_point != tail_point->next) {   
+        while (clear_point != nullptr) {   
             auto delete_point = clear_point;
             head_point->next = clear_point->next;
             clear_point = head_point->next;
-            delete delete_point;
+            delete delete_point;   
             delete_point = nullptr;
         }
+        m_length = 0;
+        tail_point = head_point;
     }
 
 /*
@@ -104,34 +107,57 @@ parameter: none
 return: none
 */
     void traverse() const {
+        if (empty()) {
+            return;
+        }
         QNode<ElemType> *traverse_point = new QNode<ElemType>;       
         traverse_point = head_point->next;
+        cout << "head ";
         while (traverse_point != nullptr) {
-            cout << "head ";
             cout << traverse_point->data;
             if (traverse_point != tail_point) {
                 cout << " ";
             }
             traverse_point = traverse_point->next;
         }
-        cout << "tail";
+        cout << " tail";
     }
 
 /*
-funtion: 在对头删除元素,并用存储值
+funtion: 插入元素到队尾   左头右尾
+parameter: element-待插入元素
+return: true is successful false is faild 
+*/
+    bool in_queue(const ElemType element){
+        QNode<ElemType> *new_point = new QNode<ElemType>;
+        new_point->data = element;   // 存储数据域
+        new_point->next = tail_point->next;   // nullptr 的传递
+        tail_point->next = new_point;  // 链接新节点
+        tail_point = new_point;   // 尾指针指向最后一个元素
+        ++m_length;   // 长度 + 1
+        return true;
+    }
+
+
+/*
+funtion: 在队头删除元素,并存储值
 parameter: element-存储值 
 return: true is successful false is faild
 */
     bool out_queue(ElemType &element) {
-        if (!size()) {
+        if (empty()) {
             throw new std::logic_error("size error");
         }
         QNode<ElemType> delete_point = new QNode<ElemType>;
-        delete_point = head_point->next;
+        delete_point = head_point->next;   // 指向出队元素
         element = delete_point->data;
-        head_point->next = delete_point->next;
+        head_point->next = delete_point->next;   // 头结点指向被删除节点的下一节点
         delete delete_point;
         delete_point = nullptr;
+        --m_length;   // 长度减 1
+        if (head_point->next == nullptr) {  // 当只有一个数据节点，且被删除时
+            tail_point = head_point;
+        }
         return true;
     }
 
@@ -140,16 +166,21 @@ funtion: 在对头删除元素
 parameter: none
 return: true is successful false is faild
 */
-    bool out_queue() {
-        if (!size()) {
+    ElemType out_queue() {
+        if (empty()) {
             throw new std::logic_error("size error");
         }
-        QNode<ElemType> delete_point = new QNode<ElemType>;
-        delete_point = head_point->next;
-        head_point->next = delete_point->next;
+        QNode<ElemType> *delete_point = new QNode<ElemType>;
+        delete_point = head_point->next;   // 指向出队元素
+        auto keep_value = delete_point->data;
+        head_point->next = delete_point->next;   // 头结点指向被删除节点的下一节点
         delete delete_point;
         delete_point = nullptr;
-        return true;
+        --m_length;   // 长度减 1
+        if (head_point->next == nullptr) {  // 当只有一个数据节点，且被删除时
+            tail_point = head_point;
+        }
+        return keep_value;
     }
 
 /*
@@ -158,35 +189,26 @@ parameter: element-存储元素
 return: true is successful false is faild
 */
     bool get_head(ElemType &element) const {
-        if (!size()) {
+        if (empty()) {
             throw new std::logic_error("size error");
         }
         element = head_point->next->data;
         return true;
     }
 
+
 /*
-funtion: 插入元素到队尾   左头右尾
-parameter: element-待插入元素
-return: true is successful false is faild 
+funtion: 获取指向首元素的指针
+parameter: none
+return: 指针
 */
-    bool in_queue(const ElemType &element){
-        QNode<ElemType> *new_point = new QNode<ElemType>;
-        new_point->data = element;
-        if (size() == 0) {
-            head_point->next = tail_point->next = new_point;
-            new_point->next = nullptr;
-            ++set_size();
-        } else {
-            new_point->next = (tail_point->next)->next; // BUG 入队
-            (tail_point->next)->next = new_point;
-            tail_point = new_point;
-            ++set_size();
+    QNode<ElemType> *begin() {
+        if (empty()) {
+            throw new std::logic_error("size error");
         }
-        return true;
+        return head_point->next;
     }
 
-    
 };
 
 }
