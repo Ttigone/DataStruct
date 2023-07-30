@@ -8,7 +8,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-namespace my_String {
+namespace myString {
     template <class CharString>
     class String {
         String() {
@@ -74,3 +74,6 @@ namespace my_String {
     };
 
 }
+
+
+#endif

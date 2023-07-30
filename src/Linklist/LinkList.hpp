@@ -17,11 +17,17 @@ namespace mylist {
 template<class ElemType>
 class LinkList {
 private:
-    Node<ElemType> *head_point;  
     size_t m_length;
+    Node<ElemType> *head_point;  
+    Node<ElemType> *tail_point;
 
+/*
+funtion: 默认构造函数
+*/
 public:
-    LinkList() : m_length(0), head_point(new Node<ElemType>) {head_point->next = nullptr;}
+    LinkList() : m_length(0), head_point(new Node<ElemType>), tail_point(head_point)
+     { head_point->next = nullptr; }
+
 /*
 funtion: 复制一个数组变为一个链表
 pargamer: ElemType a[]:数组的指针 ;  n: 复制的个数
@@ -47,7 +53,11 @@ funtion: 拷贝构造函数
 /*
 funtion: 析构函数
 */
-    ~LinkList() { delete[] head_point;}
+    ~LinkList() {
+        clear();
+        delete head_point;
+        head_point = tail_point = nullptr;
+    }
 
 public:
 /*
@@ -65,11 +75,7 @@ parameter: none
 return: true is empty, false is no empty
 */
     constexpr bool empty() const {
-        if (!size()) {
-            return true;
-        } else {
-            return false;
-        }
+        return m_length == 0;
     }
 
 /*
@@ -80,18 +86,21 @@ return: none
     void clear() {
         // way 1
         /*
-            while(m_length > 0) {
+            while(!empty()) {
                 delete_element(1);
             }
         */
 
 
         // way 2
-            auto p = head_point->next;
-            while (p) {
-                auto delete_point = p;
-                head_point->next = p->next;
-                p = p->next;
+            auto traverse_point = head_point->next;  // 从头部开始删除
+            while (traverse_point) {
+                auto delete_point = traverse_point;
+                head_point->next = delete_point->next;
+                traverse_point = traverse_point->next;  // 一旦 traverse_point 被赋值为 nullptr,说明正在删除最后一个节点
+                if (traverse_point == nullptr) {
+                    tail_point = head_point;
+                }
                 delete delete_point;
                 delete_point = nullptr;
                 --m_length;
@@ -104,16 +113,15 @@ parameter: 位置-position element-存储元素
 return: 获取是否成功, 元素是否存在
 */
     bool get_elem(int position, ElemType &element) const {
-        auto p = head_point->next;
-        while (--position && p != NULL) {
-            p = p->next;
+        auto traverse_point = head_point->next;
+        while (--position && traverse_point != NULL) {
+            traverse_point = traverse_point->next;
         }
-        if (p != NULL) {
-            element = p->data;
-            return "true";
+        if (traverse_point != NULL) {
+            element = traverse_point->data;
+            return true;
         } else {
             throw "arg error";
-            return false;
         }
     }
     
@@ -168,14 +176,14 @@ parameter: 传入元素
 return: 找到的位置,若找不到，则返回 0 
 */
     int locate(ElemType x) {
-        auto p = head_point->next;
+        auto traverse_point = head_point->next;
         unsigned int i = 0;
-        while (p != NULL) {
+        while (traverse_point != NULL) {
             ++i;
-            if (p->data == x) {
+            if (traverse_point->data == x) {
                 return i;
             } else {
-                p = p->next;
+                traverse_point = traverse_point->next;
             }
         }      
         return 0;
@@ -186,18 +194,51 @@ funtion: 向链表中插入元素
 parameter: positon-插入的位置，e-插入的元素
 return: true is successful false is faild 
 */
-    bool insert(int position, const ElemType &e) {
+    bool insert(int position, const ElemType &element) {
+        int keep_position = position;
         if (position < 1 || position > size() + 1) {
             return false;
         }
-        auto p = head_point;
+        auto traverse_point = head_point;
         while (--position) {
-            p = p->next;
+            traverse_point = traverse_point->next;
         }
-        auto p_front = new (Node<ElemType>);
-        p_front->data = e;  
-        p_front->next = p->next;  
-        p->next = p_front;
+        auto new_point = new (Node<ElemType>);
+        new_point->data = element;  
+        new_point->next = traverse_point->next;  
+        traverse_point->next = new_point;
+        if (keep_position == size() + 1) {
+            tail_point = new_point;        // tail_point 指向最后一个元素
+        }
+        ++m_length;
+        return true;
+    }
+
+/*
+funtion: 将元素插入在头部
+parameter: element-元素
+return: bool 值
+*/
+    bool add_to_head(const ElemType &element) {
+        Node<ElemType> *new_point = new (Node<ElemType>);
+        new_point->data = element;
+        new_point->next = head_point->next;
+        head_point->next = new_point;
+        ++m_length;
+        return true;
+    }
+
+/*
+funtion: 将元素插入在尾部
+parameter: element-元素
+return: bool 值
+*/
+    bool add_to_tail(const ElemType &element) {
+        Node<ElemType> *new_point = new (Node<ElemType>);
+        new_point->data = element;
+        new_point->next = tail_point->next; // nullptr 的传递
+        tail_point->next = new_point;        // 链接新节点
+        tail_point = new_point;       // tail_point 指向最后一个元素
         ++m_length;
         return true;
     }
@@ -211,14 +252,18 @@ return: true is successful, false is faild
         if (position < 1 || position > size()) {
             return false;
         }
-        auto p = head_point;
+        int keep_position = position;
+        auto traverse_point = head_point;
         while (--position) {
-            p = p->next;
+            traverse_point = traverse_point->next;
         }
-        decltype(p) Delete_point = p->next;
-        p->next = Delete_point->next;
-        delete Delete_point;
-        Delete_point = nullptr;
+        auto delete_point = traverse_point->next;
+        traverse_point->next = delete_point->next;
+        if (keep_position == size()) {  // 删除的是最后一个元素
+            tail_point = traverse_point;   // tail_point 指向最后一个元素
+        }
+        delete delete_point;
+        delete_point = nullptr;
         --m_length;
         return true;
     }
@@ -232,15 +277,20 @@ return: true is successful, false is faild
         if (position < 1 || position > size()) {
             return false;
         }
-        auto p = head_point;
+        int keep_position = position;
+        auto traverse_point = head_point;
         while (--position) {
-            p = p->next;
+            traverse_point = traverse_point->next;
         }
-        decltype(p) Delete_point = p->next;
+        auto Delete_point = traverse_point->next;
         element = Delete_point->data;
-        p->next = Delete_point->next;
+        traverse_point->next = Delete_point->next;
+        if (keep_position == size()) {
+            tail_point = traverse_point;
+        }
         delete Delete_point;
         Delete_point = nullptr;
+        --m_length;
         return true;
     }
 
@@ -250,10 +300,10 @@ parameter: none
 return: none
 */
     void traverse() {   
-        auto p = head_point->next;
-        while (p != NULL) {
-            cout << p->data << " ";
-            p = p->next;
+        auto traverse_point = head_point->next;
+        while (traverse_point != NULL) {
+            cout << traverse_point->data << " ";
+            traverse_point = traverse_point->next;
         }
         cout << endl;
     }

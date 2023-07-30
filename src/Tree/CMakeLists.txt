@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 
 add_library(Tree_header INTERFACE)
 set(BINARY_TREE_HPP ${CMAKE_CURRENT_SOURCE_DIR}/Binary_Tree.hpp)
