@@ -50,7 +50,7 @@ return: none
     }
 
 /*
-funtion: 返回链表长度
+funtion: 返回栈长度
 parameter: none
 return: 长度 length 
 */

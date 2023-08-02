@@ -8,10 +8,13 @@ target_link_libraries(main PUBLIC SeqList_header)
 target_include_directories(main INTERFACE "$<TARGET_PROPERTY:SeqList_header,INTERFACE_INCLUDE_DIRECTORIES>") 
 
 
-add_subdirectory(Linklist)
-target_link_libraries(main PUBLIC LinkList_header)
-install(FILES LinkList.hpp DESTINATION LinkList/)
-target_include_directories(main INTERFACE "$<TARGET_PROPERTY:LinkList_header,INTERFACE_INCLUDE_DIRECTORIES>") 
+add_subdirectory(Linkedlist)
+target_link_libraries(main PUBLIC LinkedList_header)
+install(FILES LinkedList.hpp DESTINATION LinkedList/)
+target_include_directories(main INTERFACE "$<TARGET_PROPERTY:LinkedList_header,INTERFACE_INCLUDE_DIRECTORIES>") 
+
+# install(FILES DoublyLinkedList.hpp DESTINATION LinkedList/)
+# target_include_directories(main INTERFACE "$<TARGET_PROPERTY:DoublyLinkedList_header,INTERFACE_INCLUDE_DIRECTORIES>") 
 
 add_subdirectory(Stack)
 target_link_libraries(main PUBLIC Stack_header)

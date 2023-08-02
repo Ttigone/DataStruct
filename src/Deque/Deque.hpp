@@ -53,14 +53,9 @@ parameter: none
 return: none
 */
     ~Deque() {
-        if (head_point != tail_point) {
-            delete head_point;
-            delete tail_point;
-            head_point = tail_point = nullptr;
-        } else {
-            delete head_point;
-            head_point = tail_point = nullptr;
-        }
+        clear();
+        delete head_point;
+        head_point = tail_point = nullptr;
     }
     
 public:
