@@ -1,5 +1,7 @@
+# 设置cmake 最低版本
 cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 
+# ds 为工程名
 project(ds
     VERSION         0.0.1
     DESCRIPTION     "cmake project of Data-Struct"
@@ -64,8 +66,8 @@ include(GenerateExportHeader)
 add_subdirectory(src) #  这行代码搜索 src 文件夹，执行
 # add_subdirectory(src/Seqlist)
 
- include (TestBigEndian)
- test_big_endian(IS_BIG_ENDIAN)
+#  include (TestBigEndian)
+#  test_big_endian(IS_BIG_ENDIAN)
 
 
 

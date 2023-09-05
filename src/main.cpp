@@ -2,7 +2,10 @@
 #include <cmath>
 #include <set>
 #include <string>
+#include <list>
+#include <forward_list>
 #include <vector>
+#include <array>
 #include <algorithm>
 #include <algorithm>
 #include <chrono>
@@ -11,7 +14,19 @@
 #include <sstream>
 #include <string>
 #include <time.h>
+#include <locale>
+#include <functional>
+#include <unordered_map>
+#include <memory>
+#include <numeric>
+#include <utility>
+
+#include <stdio.h>
+
 using namespace std;
+
+
+using namespace std::placeholders;
 
 // #include "Seqlist/SeqList.hpp"
 // #include "Linkedlist/DoublyLinkedList.hpp"
@@ -19,6 +34,9 @@ using namespace std;
 // #include "Deque/Deque.hpp"
 // #include "String/String.hpp"
 
+shared_ptr<int> f(int i) {
+    return make_shared<int>(i);
+}
 
 int main()
 {
@@ -29,6 +47,16 @@ int main()
 
 
 
+    int r = 32;
+    int &&i = std::move(r);
+    cout << i << endl;
+    i = 22;
+    cout << i << endl;
+
+    r = 24;
+    cout << i << endl;
+
+    int &&s = 31;
 
     cout << endl;
     auto end_time = std::chrono::high_resolution_clock::now();

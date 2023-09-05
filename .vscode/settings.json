@@ -22,6 +22,26 @@
         "array": "cpp",
         "unordered_map": "cpp",
         "functional": "cpp",
-        "xutility": "cpp"
-    }
+        "xutility": "cpp",
+        "algorithm": "cpp",
+        "atomic": "cpp",
+        "chrono": "cpp",
+        "forward_list": "cpp",
+        "initializer_list": "cpp",
+        "iomanip": "cpp",
+        "list": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp",
+        "xfacet": "cpp",
+        "xlocale": "cpp",
+        "xlocbuf": "cpp",
+        "xmemory": "cpp",
+        "deque": "cpp",
+        "numeric": "cpp",
+        "stdexcept": "cpp",
+        "locale": "cpp",
+        "new": "cpp"
+    },
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "aiXcoder.showTrayIcon": true,
 }
