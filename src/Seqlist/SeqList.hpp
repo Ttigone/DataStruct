@@ -19,14 +19,19 @@ private:
     int max_size;
 public:
 /*
-funtion: 默认构造函数
+funtion: 默认构造函数, 默认提供 10 个空间
 */
-    SeqList() = default;
+    SeqList() {
+        data = new ElemType[10];
+        m_length = 0;
+        max_size = 10;
+    };
 
 /*
 funtion: 有参构造函数 
 */
-    explicit SeqList(int init_size = 10) { 
+    explicit SeqList(int init_size) { 
+        init_size = 10;
         if (init_size <= 0) {
             throw new std::logic_error("size error");
         }
@@ -125,6 +130,14 @@ parameter: none
 return: none
 */
     void traverse() const {
+        cout << "output element: ";
+        for (auto i = 0; i < size(); ++i) {
+            cout << data[i] << " ";
+        }
+        cout << endl;
+    }
+
+    void traverse() {
         cout << "output element: ";
         for (auto i = 0; i < size(); ++i) {
             cout << data[i] << " ";

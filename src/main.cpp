@@ -28,15 +28,13 @@ using namespace std;
 
 using namespace std::placeholders;
 
-// #include "Seqlist/SeqList.hpp"
-// #include "Linkedlist/DoublyLinkedList.hpp"
-// #include "Stack/Stack.hpp"
-// #include "Deque/Deque.hpp"
-// #include "String/String.hpp"
+#include "Seqlist/SeqList.hpp"
+#include "Linkedlist/DoublyLinkedList.hpp"
+#include "Stack/Stack.hpp"
+#include "Deque/Deque.hpp"
+#include "String/String.hpp"
 
-shared_ptr<int> f(int i) {
-    return make_shared<int>(i);
-}
+#include "Stack/Hanoi.hpp"
 
 int main()
 {
@@ -46,17 +44,27 @@ int main()
     std::cin.tie(nullptr);
 
 
+    // myseq::SeqList<int> s;
+    // s.insert(1, 19);
+    // s.traverse();
+    // cout << endl;
 
-    int r = 32;
-    int &&i = std::move(r);
-    cout << i << endl;
-    i = 22;
-    cout << i << endl;
+    // mystack::Stack<int> s1;
+    // s1.push(12);
+    // s1.traverse();
+    // cout << endl;
 
-    r = 24;
-    cout << i << endl;
+    // mydoublylist::DoublyLinkedList<int> s2;
+    // s2.insert(1, 13);
+    // s2.traverse();
+    // cout << endl;
 
-    int &&s = 31;
+    // myqueue::Deque<int> s3;
+    // s3.in_queue(13);
+    // s3.traverse();
+
+    myhanoi::hanoi(3, 'a', 'b', 'c');
+
 
     cout << endl;
     auto end_time = std::chrono::high_resolution_clock::now();
