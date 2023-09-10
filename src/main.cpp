@@ -63,12 +63,24 @@ int main()
     // s3.in_queue(13);
     // s3.traverse();
 
-    myhanoi::hanoi(3, 'a', 'b', 'c');
+    // myhanoi::hanoi(3, 'a', 'b', 'c');
 
+    myListStack::Stack<int> s;
+    s.push(1);
+    s.push(2);
+
+    s.push(1);
+    s.push(2);
+    s.traverse();
+
+    cout << endl;
+
+
+    
 
     cout << endl;
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
-    cout << "runtime: " << duration.count() << " ms" << endl;
+    cout << "runtime: " << duration.count() << " us" << endl;
     return 0;
 }

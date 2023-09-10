@@ -9,7 +9,7 @@ using std::cout;
 using std::endl;
 
 
-namespace mystack {
+namespace mySeqStack { // 顺序栈
 template<class ElemType>
 class Stack {
 private:
@@ -138,7 +138,7 @@ funtion: 获取栈顶元素
 parameter: none
 return: 栈顶元素
 */
-    ElemType get_top() {
+    ElemType getTop() {
         if (m_top > m_base) {
             int pos = m_top - 1;
             return data[pos];
@@ -166,7 +166,123 @@ return: none
 
 };
 
+} // template class Stack<ElemType> OK
+
+namespace myListStack {
+
+template<typename ElemType>
+struct StackNode {
+    ElemType data;
+    StackNode<ElemType> *next;
+};
+template<typename ElemType>
+class Stack {
+private: 
+    StackNode<ElemType> *head; // 头结点
+    size_t slength;
+public:
+/*
+funtion: 默认构造函数
+*/
+
+    Stack() : head(new StackNode<ElemType>), slength(0) {
+        head->next = nullptr;
+    }
+
+/*
+funtion: 拷贝构造函数
+*/
+    Stack(const Stack<ElemType> &copy) : head(new StackNode<ElemType>), slength(0) {
+        head->next = nullptr;
+        auto clength = copy.length();
+        for (int i = 0; i < clength; ++i) {
+            push(copy.get(clength - i - 1));
+        }
+    }
+
+
+/*
+funtion: 析构函数
+*/
+    ~Stack() {
+        while (!isEmpty()) {
+            pop();
+        }
+    }
+
+/*
+funtion: 判断是否为空
+*/
+    constexpr bool isEmpty() const {
+        return head->next == nullptr;
+    }
+
+/*
+funtion: 返回长度
+*/
+    constexpr size_t length() const {
+        return slength;
+    }
+
+/*
+funtion: 入栈
+*/
+    void push(const ElemType &element) {
+        StackNode<ElemType> *newNode = new StackNode<ElemType>;
+        newNode->data = element;
+        newNode->next = head->next;
+        head->next = newNode;
+        ++slength;
+    }
+
+/*
+funtion: 出栈
+*/
+    void pop(int i = 1) {
+        if (isEmpty()) {
+            throw std::runtime_error("Stack is empty");
+        }
+        auto deleteNode = head->next;
+        head->next = deleteNode->next;
+        delete deleteNode;
+        deleteNode = nullptr;
+        --slength;
+    }
+
+/*
+funtion: 遍历栈
+*/
+    void traverse() const {
+        auto traverseNode = head->next;
+        while (traverseNode) {
+            cout << traverseNode->data << " ";
+            traverseNode = traverseNode->next;
+        }
+    }
+
+/*
+funtion: 获取特定位置的元素
+*/
+    ElemType get(int i = 0) const {
+        if (isEmpty()) {
+            throw std::runtime_error("Stack is empty");
+        }
+        if (i >= length()) {
+            cout << "y";
+            throw std::runtime_error("Index out of range");
+        }
+        auto recordNode = head->next;
+        while (i-- > 0) {
+            recordNode = recordNode->next;
+        }
+        return recordNode->data;
+    }
+
+
+
+};
+
 }
 
-// template class Stack<ElemType> OK
+
 #endif

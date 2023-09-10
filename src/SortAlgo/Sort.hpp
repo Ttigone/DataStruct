@@ -2,13 +2,43 @@
 
 #include <vector>
 
-
 namespace mysort{
 
-namespace selection {
+namespace Insert {
+
+namespace insertSort {
+
+} // insertSort
+
+namespace binInsertSort {
+
+}
+
+namespace shellSort {
+
+} // shellSort
+
+
+} // Insert
+
+namespace Exchange {
+
+namespace bubbleSort {
+
+} // bubbleSort
+
+namespace quickSort {
+
+} // quickSort
+
+} // Exchange
+
+namespace Selection {
+
+namespace selectSort {
 
 template <typename T>
-void select_sort(T a[], int n) {
+void Sort(T a[], int n) {
     for (int i = 0; i < n - 1; ++i) {
         int min_index = i;
         for (int j = i + 1; j < n; ++j) {
@@ -20,7 +50,7 @@ void select_sort(T a[], int n) {
 }
 
 template<typename T>
-void select_sort(std::vector<T> vec) {
+void sort(std::vector<T> vec) {
     for (int i = 0; i < vec.size() - 1; ++i) {
         int min_index = i;
         for (int j = i + 1; j < vec.size(); ++j) {
@@ -31,7 +61,27 @@ void select_sort(std::vector<T> vec) {
     }
 }
 
-} // selection
+} // selectSort
+
+namespace heapSort {
+
+} // heapSort
+
+} // Selection
+
+namespace Merge {
+
+namespace mergeSort{
+
+} // mergeSort
+
+} // Merge
+
+namespace Radix {
+namespace radixSort{
+} // radixSort
+
+} // Radix
 
 
 } // mysort

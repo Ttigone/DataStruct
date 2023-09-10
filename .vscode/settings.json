@@ -40,7 +40,15 @@
         "numeric": "cpp",
         "stdexcept": "cpp",
         "locale": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "xlocnum": "cpp",
+        "xstddef": "cpp",
+        "memory_resource": "cpp",
+        "fstream": "cpp",
+        "cwchar": "cpp",
+        "random": "cpp",
+        "iosfwd": "cpp",
+        "sstream": "cpp"
     },
     "editor.suggest.snippetsPreventQuickSuggestions": false,
     "aiXcoder.showTrayIcon": true,
