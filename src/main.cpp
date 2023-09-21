@@ -26,15 +26,14 @@
 using namespace std;
 
 
-using namespace std::placeholders;
-
 #include "Seqlist/SeqList.hpp"
 #include "Linkedlist/DoublyLinkedList.hpp"
 #include "Stack/Stack.hpp"
 #include "Deque/Deque.hpp"
 #include "String/String.hpp"
-
 #include "Stack/Hanoi.hpp"
+#include "Tree/Binary_Tree.hpp"
+
 
 int main()
 {
@@ -43,44 +42,32 @@ int main()
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
 
+    // for (int i = 0; i < 10000; ++i) {
+    for (int i = 0; i < 1; ++i) {
+        mybinarytree::Tree<char> tree("A(B(D(,G)),C(E,F))");
+        tree.viewTree(tree.getRoot());
+        cout << endl;
+        // cout << tree.treeHeight(tree.getRoot());
+        tree.inOrder(tree.getRoot());
+        cout << endl;
+        tree.postOrder(tree.getRoot());
+        cout << endl;
+        tree.preOrder(tree.getRoot());
+        cout << endl;
+        cout << tree.nodeCount(tree.getRoot()) << endl;
 
-    // myseq::SeqList<int> s;
-    // s.insert(1, 19);
-    // s.traverse();
-    // cout << endl;
-
-    // mystack::Stack<int> s1;
-    // s1.push(12);
-    // s1.traverse();
-    // cout << endl;
-
-    // mydoublylist::DoublyLinkedList<int> s2;
-    // s2.insert(1, 13);
-    // s2.traverse();
-    // cout << endl;
-
-    // myqueue::Deque<int> s3;
-    // s3.in_queue(13);
-    // s3.traverse();
-
-    // myhanoi::hanoi(3, 'a', 'b', 'c');
-
-    myListStack::Stack<int> s;
-    s.push(1);
-    s.push(2);
-
-    s.push(1);
-    s.push(2);
-    s.traverse();
-
-    cout << endl;
+        tree.viewLeafL(tree.getRoot());
+        cout << endl;
+        tree.viewLeafH(tree.getRoot());
+        cout << endl;
+    }
 
 
-    
+
 
     cout << endl;
     auto end_time = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
-    cout << "runtime: " << duration.count() << " us" << endl;
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    cout << "Run 10000 times: " << duration.count() << " ms" << endl;
     return 0;
 }
