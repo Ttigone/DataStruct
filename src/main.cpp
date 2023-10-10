@@ -35,9 +35,6 @@ using namespace std;
 #include "Stack/Hanoi.hpp"
 #include "Tree/Binary_Tree.hpp"
 
-int compa(const char* s1, const char* s2) {
-    return strcmp(s1, s2);
-}
 
 
 int main()
@@ -98,15 +95,18 @@ int main()
     list.insert(2, 2);
     list.insert(3, 3);
     list.insert(4, 4);
-    list.traverse();
 
 
     int a[] = {1, 23, 12};
     mylist::LinkList<int> list2(a, 3);
 
-    list2.merge(list);
+    mylist::LinkList<int> list3(mylist::merge(list, list2));
 
-    list2.traverse();
+
+    list3.traverse();
+
+
+
 
     cout << endl;
     auto end_time = std::chrono::high_resolution_clock::now();

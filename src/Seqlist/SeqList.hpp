@@ -106,9 +106,9 @@ return: none
 /*
 funtion: 判断是否为空
 parameter: none
-return: true is empty false is no empty
+return: true is isEmpty false is no isEmpty
 */
-    constexpr bool empty() const {
+    constexpr bool isEmpty() const {
         return !size();
     }
 
