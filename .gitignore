@@ -1,76 +1,82 @@
-build/cmake_install.cmake
-build/CMakeCache.txt
-build/compile_commands.json
-build/Makefile
-build/.cmake/api/v1/query/client-vscode/query.json
-build/.cmake/api/v1/reply/cache-v2-4a46975d5bb67c22643a.json
-build/.cmake/api/v1/reply/cmakeFiles-v1-b3207948e4a5efeff128.json
-build/.cmake/api/v1/reply/codemodel-v2-ae46bf129c4319209e61.json
-build/.cmake/api/v1/reply/directory-.-Debug-d0094a50bb2071803777.json
-build/.cmake/api/v1/reply/directory-src-Debug-c94b7c2814d5a21df52c.json
-build/.cmake/api/v1/reply/directory-src.Deque-Debug-e95e047bf8754374d5b1.json
-build/.cmake/api/v1/reply/directory-src.Linkedlist-Debug-cd4017436720bed913fb.json
-build/.cmake/api/v1/reply/directory-src.Seqlist-Debug-41b3a41918a24b8c206a.json
-build/.cmake/api/v1/reply/directory-src.Stack-Debug-2addd9a669076214a85e.json
-build/.cmake/api/v1/reply/directory-src.String-Debug-e16b8be17fef69f7481e.json
-build/.cmake/api/v1/reply/directory-src.Tree-Debug-1ed52a03fd1cec013e46.json
-build/.cmake/api/v1/reply/index-2023-09-06T15-07-05-0413.json
-build/.cmake/api/v1/reply/target-main-Debug-de956247b9cdf27d7a34.json
-build/.cmake/api/v1/reply/toolchains-v1-f342c06f3984d23d9bd8.json
-build/CMakeFiles/cmake.check_cache
-build/CMakeFiles/CMakeDirectoryInformation.cmake
-build/CMakeFiles/CMakeOutput.log
-build/CMakeFiles/Makefile.cmake
-build/CMakeFiles/Makefile2
-build/CMakeFiles/progress.marks
-build/CMakeFiles/TargetDirectories.txt
-build/CMakeFiles/3.24.2/CMakeCXXCompiler.cmake
-build/CMakeFiles/3.24.2/CMakeDetermineCompilerABI_CXX.bin
-build/CMakeFiles/3.24.2/CMakeRCCompiler.cmake
-build/CMakeFiles/3.24.2/CMakeSystem.cmake
-build/CMakeFiles/3.24.2/CompilerIdCXX/a.exe
-build/CMakeFiles/3.24.2/CompilerIdCXX/CMakeCXXCompilerId.cpp
-build/src/cmake_install.cmake
-build/src/main.exe
-build/src/Makefile
-build/src/CMakeFiles/CMakeDirectoryInformation.cmake
-build/src/CMakeFiles/progress.marks
-build/src/CMakeFiles/main.dir/build.make
-build/src/CMakeFiles/main.dir/cmake_clean.cmake
-build/src/CMakeFiles/main.dir/compiler_depend.internal
-build/src/CMakeFiles/main.dir/compiler_depend.make
-build/src/CMakeFiles/main.dir/compiler_depend.ts
-build/src/CMakeFiles/main.dir/depend.make
-build/src/CMakeFiles/main.dir/DependInfo.cmake
-build/src/CMakeFiles/main.dir/flags.make
-build/src/CMakeFiles/main.dir/link.txt
-build/src/CMakeFiles/main.dir/linklibs.rsp
-build/src/CMakeFiles/main.dir/main.cpp.obj
-build/src/CMakeFiles/main.dir/main.cpp.obj.d
-build/src/CMakeFiles/main.dir/objects.a
-build/src/CMakeFiles/main.dir/objects1.rsp
-build/src/CMakeFiles/main.dir/progress.make
-build/src/Deque/cmake_install.cmake
-build/src/Deque/Makefile
-build/src/Deque/CMakeFiles/CMakeDirectoryInformation.cmake
-build/src/Deque/CMakeFiles/progress.marks
-build/src/Linkedlist/cmake_install.cmake
-build/src/Linkedlist/Makefile
-build/src/Linkedlist/CMakeFiles/CMakeDirectoryInformation.cmake
-build/src/Linkedlist/CMakeFiles/progress.marks
-build/src/Seqlist/cmake_install.cmake
-build/src/Seqlist/Makefile
-build/src/Seqlist/CMakeFiles/CMakeDirectoryInformation.cmake
-build/src/Seqlist/CMakeFiles/progress.marks
-build/src/Stack/cmake_install.cmake
-build/src/Stack/Makefile
-build/src/Stack/CMakeFiles/CMakeDirectoryInformation.cmake
-build/src/Stack/CMakeFiles/progress.marks
-build/src/String/cmake_install.cmake
-build/src/String/Makefile
-build/src/String/CMakeFiles/CMakeDirectoryInformation.cmake
-build/src/String/CMakeFiles/progress.marks
-build/src/Tree/cmake_install.cmake
-build/src/Tree/Makefile
-build/src/Tree/CMakeFiles/CMakeDirectoryInformation.cmake
-build/src/Tree/CMakeFiles/progress.marks
+# build/cmake_install.cmake
+# build/CMakeCache.txt
+# build/compile_commands.json
+# build/Makefile
+# build/.cmake/api/v1/query/client-vscode/query.json
+# build/.cmake/api/v1/reply/cache-v2-4a46975d5bb67c22643a.json
+# build/.cmake/api/v1/reply/cmakeFiles-v1-b3207948e4a5efeff128.json
+# build/.cmake/api/v1/reply/codemodel-v2-ae46bf129c4319209e61.json
+# build/.cmake/api/v1/reply/directory-.-Debug-d0094a50bb2071803777.json
+# build/.cmake/api/v1/reply/directory-src-Debug-c94b7c2814d5a21df52c.json
+# build/.cmake/api/v1/reply/directory-src.Deque-Debug-e95e047bf8754374d5b1.json
+# build/.cmake/api/v1/reply/directory-src.Linkedlist-Debug-cd4017436720bed913fb.json
+# build/.cmake/api/v1/reply/directory-src.Seqlist-Debug-41b3a41918a24b8c206a.json
+# build/.cmake/api/v1/reply/directory-src.Stack-Debug-2addd9a669076214a85e.json
+# build/.cmake/api/v1/reply/directory-src.String-Debug-e16b8be17fef69f7481e.json
+# build/.cmake/api/v1/reply/directory-src.Tree-Debug-1ed52a03fd1cec013e46.json
+# build/.cmake/api/v1/reply/index-2023-09-06T15-07-05-0413.json
+# build/.cmake/api/v1/reply/target-main-Debug-de956247b9cdf27d7a34.json
+# build/.cmake/api/v1/reply/toolchains-v1-f342c06f3984d23d9bd8.json
+# build/CMakeFiles/cmake.check_cache
+# build/CMakeFiles/CMakeDirectoryInformation.cmake
+# build/CMakeFiles/CMakeOutput.log
+# build/CMakeFiles/Makefile.cmake
+# build/CMakeFiles/Makefile2
+# build/CMakeFiles/progress.marks
+# build/CMakeFiles/TargetDirectories.txt
+# build/CMakeFiles/3.24.2/CMakeCXXCompiler.cmake
+# build/CMakeFiles/3.24.2/CMakeDetermineCompilerABI_CXX.bin
+# build/CMakeFiles/3.24.2/CMakeRCCompiler.cmake
+# build/CMakeFiles/3.24.2/CMakeSystem.cmake
+# build/CMakeFiles/3.24.2/CompilerIdCXX/a.exe
+# build/CMakeFiles/3.24.2/CompilerIdCXX/CMakeCXXCompilerId.cpp
+# build/src/cmake_install.cmake
+# build/src/main.exe
+# build/src/Makefile
+# build/src/CMakeFiles/CMakeDirectoryInformation.cmake
+# build/src/CMakeFiles/progress.marks
+# build/src/CMakeFiles/main.dir/build.make
+# build/src/CMakeFiles/main.dir/cmake_clean.cmake
+# build/src/CMakeFiles/main.dir/compiler_depend.internal
+# build/src/CMakeFiles/main.dir/compiler_depend.make
+# build/src/CMakeFiles/main.dir/compiler_depend.ts
+# build/src/CMakeFiles/main.dir/depend.make
+# build/src/CMakeFiles/main.dir/DependInfo.cmake
+# build/src/CMakeFiles/main.dir/flags.make
+# build/src/CMakeFiles/main.dir/link.txt
+# build/src/CMakeFiles/main.dir/linklibs.rsp
+# build/src/CMakeFiles/main.dir/main.cpp.obj
+# build/src/CMakeFiles/main.dir/main.cpp.obj.d
+# build/src/CMakeFiles/main.dir/objects.a
+# build/src/CMakeFiles/main.dir/objects1.rsp
+# build/src/CMakeFiles/main.dir/progress.make
+# build/src/Deque/cmake_install.cmake
+# build/src/Deque/Makefile
+# build/src/Deque/CMakeFiles/CMakeDirectoryInformation.cmake
+# build/src/Deque/CMakeFiles/progress.marks
+# build/src/Linkedlist/cmake_install.cmake
+# build/src/Linkedlist/Makefile
+# build/src/Linkedlist/CMakeFiles/CMakeDirectoryInformation.cmake
+# build/src/Linkedlist/CMakeFiles/progress.marks
+# build/src/Seqlist/cmake_install.cmake
+# build/src/Seqlist/Makefile
+# build/src/Seqlist/CMakeFiles/CMakeDirectoryInformation.cmake
+# build/src/Seqlist/CMakeFiles/progress.marks
+# build/src/Stack/cmake_install.cmake
+# build/src/Stack/Makefile
+# build/src/Stack/CMakeFiles/CMakeDirectoryInformation.cmake
+# build/src/Stack/CMakeFiles/progress.marks
+# build/src/String/cmake_install.cmake
+# build/src/String/Makefile
+# build/src/String/CMakeFiles/CMakeDirectoryInformation.cmake
+# build/src/String/CMakeFiles/progress.marks
+# build/src/Tree/cmake_install.cmake
+# build/src/Tree/Makefile
+# build/src/Tree/CMakeFiles/CMakeDirectoryInformation.cmake
+# build/src/Tree/CMakeFiles/progress.marks
+build/
+.idea/
+.vs/
+cmake-build-debug/
+out/
+.vscode/

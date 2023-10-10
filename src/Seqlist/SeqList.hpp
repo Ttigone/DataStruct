@@ -73,7 +73,7 @@ funtion: 设置当前有效长度
 parameter: none
 return: 长度的引用
 */
-    constexpr int& set_size() {
+    constexpr int& setSize() {
         return m_length;
     }
 
@@ -82,7 +82,7 @@ funtion: 获取可存储的最大长度
 parameter: none
 return: 可存储最大长度
 */
-    constexpr int m_size() noexcept {
+    constexpr int mSize() noexcept {
         return max_size;
     }
 
@@ -121,7 +121,7 @@ return: none
         for (int i = 0; i < size(); ++i) {
             data[i] = 0;
         }
-        set_size() = 0;
+        setSize() = 0;
     }
 
 /*
@@ -130,14 +130,6 @@ parameter: none
 return: none
 */
     void traverse() const {
-        cout << "output element: ";
-        for (auto i = 0; i < size(); ++i) {
-            cout << data[i] << " ";
-        }
-        cout << endl;
-    }
-
-    void traverse() {
         cout << "output element: ";
         for (auto i = 0; i < size(); ++i) {
             cout << data[i] << " ";
@@ -162,7 +154,7 @@ funtion: 获取指定位置的元素
 parameter: position-指定位置  e-存储元素
 return: none
 */
-    void get_elem(int position, ElemType &e) const {
+    void getElem(int position, ElemType &e) const {
         if (position < 1 || position > size()) {
             throw "arg is invaild";
         }
@@ -174,7 +166,7 @@ funtion: 为指定位置设定元素
 parameter: position-指定位置 element-设定的元素
 return: true is successful false is faild
 */
-    bool set_elem(int position, const ElemType &element) {
+    bool setElem(int position, const ElemType &element) {
         if (position < 1 || position > size()) {
             return false;
         }
@@ -225,7 +217,7 @@ return: none
             data[j] = data[j - 1];
         }
         data[position - 1] = e;
-        ++set_size();
+        ++setSize();
     }
 
 /*
@@ -233,7 +225,7 @@ funtion: 删除指定位置的元素
 parameter: position-删除的位置 e-存储删除的元素
 return: none
 */
-    void delete_position(int position, ElemType &e) {
+    void deletePos(int position, ElemType &e) {
         if (position < 1 || position > size()) {
             throw "arg is invaild";
         }
@@ -241,7 +233,7 @@ return: none
         for (auto j = size(); position < j; ++position) {
             data[position - 1] = data[position];
         }
-        data[set_size()--] = 0;
+        data[setSize()--] = 0;
     }
     
 /*
@@ -249,14 +241,14 @@ funtion: 删除指定位置的元素
 parameter: position-删除的位置 
 return: none
 */
-    void delete_position(int position) {   // 不返回删除的元素
+    void deletePos(int position) {   // 不返回删除的元素
         if (position < 1 || position > size()) {
             throw "arg is invaild";
         }
         for (auto j = size(); position < j; ++position) {
             data[position - 1] = data[position];
         }
-        data[set_size()--] = 0;
+        data[setSize()--] = 0;
     }
 
 /*
@@ -264,7 +256,7 @@ funtion: 删除顺序表中连续的重复的元素
 parameter: none
 return: none
 */
-    void delete_element(const ElemType &e) {
+    void deleteElem(const ElemType &e) {
 //***********************************************************************//
 //  双指针法,并未改变原有数据顺序,但仍保留在数组中
         int slow_point = 0;
@@ -276,7 +268,7 @@ return: none
         }
         // cout  << slow_point;
         // cout << '\n' << data[0] << " " << data[1];
-        set_size() = slow_point;
+        setSize() = slow_point;
         // if (label) {
         //     PrintList();
         // }
@@ -320,7 +312,7 @@ return: none
         n = merge_target.size();
         k = m + n - 1;
         i = m - 1, j = n - 1;
-        while (m + n > m_size()) {
+        while (m + n > mSize()) {
             resize();
         }
         while(i >= 0 && j >= 0) {
@@ -332,7 +324,7 @@ return: none
             while(j >= 0) {
                 data[k--] = merge_target.data[j--];
             }
-            set_size() = m + n;
+            setSize() = m + n;
         }
         return true;
     }

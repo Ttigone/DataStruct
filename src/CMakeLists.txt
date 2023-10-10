@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 add_executable(main main.cpp)
 
 add_subdirectory(Seqlist)
-# target_link_libraries(main PUBLIC SeqList_header)
+ target_link_libraries(main PUBLIC SeqList_header)
 # install(FILES SeqList.hpp DESTINATION Seqlist/)
 # target_include_directories(main INTERFACE "$<TARGET_PROPERTY:SeqList_header,INTERFACE_INCLUDE_DIRECTORIES>") 
 

@@ -22,7 +22,7 @@ class Tree {
 private:
     TreeNode<ElemType> *root;
 
-private:
+public:
 /*
 function: 默认构造函数 - disable
 */
@@ -85,6 +85,13 @@ function: 有参构造函数
         
     }
 
+/*
+function: 有参构造函数
+*/
+    Tree(const std::string pre, const std::string in, size_t n) : Tree() {
+        root = createTreePI(pre, in, n);
+    }
+
 
 /*
 function: 析构函数
@@ -94,6 +101,57 @@ function: 析构函数
     }
 
 public:
+/*
+function: 先序中序构造二叉树
+*/
+    TreeNode<ElemType>* createTreePI(
+            const std::string pre, 
+            const std::string in, 
+            size_t n                ) 
+    {
+        if (n <= 0) {
+            return nullptr;
+        }
+        TreeNode<ElemType>* b = new TreeNode<ElemType>;
+        b->data = pre.at(0);  // 根节点数据域
+        auto it = in.begin();
+        for (; it != in.end(); ++it) {
+            if (*it == pre.at(0)) {
+                break;
+            }
+        }
+        int r = it - in.begin();
+        b->lChild = createTreePI(pre.substr(1, pre.size() - 1), in, r);
+        b->rChild = createTreePI(pre.substr(r + 1, pre.size() - (r + 1)), in.substr(r + 1, in.size() - (r + 1)), n - r - 1);
+        return  b;
+    }
+
+/*
+function: 中序后序构造二叉树
+*/
+    TreeNode<ElemType>* createTreeIP(
+        const std::string in,            // 中序
+        const std::string post,          // 后序
+        size_t n                    )  
+    {
+        if (n <= 0) {
+            return nullptr;
+        }
+        auto inSize = in.size();
+        auto postSize = post.size();
+        TreeNode<ElemType> *b = new TreeNode<ElemType>;
+        b->data = post.at(postSize - 1);                 // 存储根节点
+        auto it = in.begin();
+        for (; it != in.end(); ++it) {
+            if (*it == b->data) {
+                break;
+            }
+        }
+        int r = it - in.begin();            // r 为根节点在中序的下标
+        b->lChild = createTreeIP(in.substr(0, r), post.substr(0, r), r);
+        b->rChild = createTreeIP(in.substr(r + 1, inSize - (r + 1)), post.substr(r , postSize - (r + 1)), n - (r + 1));
+        return b;
+    }        
 /*
 function: 输出二叉树
 */
@@ -147,7 +205,7 @@ funtion: 返回二叉树的根
 parameter: none
 return: 根节点
 */
-    constexpr TreeNode<ElemType>* getRoot() noexcept {
+    constexpr TreeNode<ElemType>* &getRoot() noexcept {
         return root;
     } 
 
