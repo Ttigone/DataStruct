@@ -44,7 +44,6 @@ int main()
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
 
-//     // for (int i = 0; i < 10000; ++i) {
 //     for (int i = 0; i < 1; ++i) {
 //         mybinarytree::Tree<char> tree("A(B(D(,G)),C(E,F))");
 //         tree.viewTree(tree.getRoot());
@@ -79,15 +78,7 @@ int main()
 //
 //    cout << s.getRoot();
 
-    // string s = "12345";
-    // auto it = s.begin();
-    // for (;it != s.end(); ++it) {
-    //     if (*it == '3') {
-    //         break;
-    //     }
-    // }
-    // cout << it - s.begin();
-    // cout << s.substr(0, 5);   // 从下标为 0 的开始 5 个字符
+for (int s = 0; s < 10000; ++s) {
 
     mylist::LinkList<int> list;
 
@@ -96,16 +87,24 @@ int main()
     list.insert(3, 3);
     list.insert(4, 4);
 
-
     int a[] = {1, 23, 12};
     mylist::LinkList<int> list2(a, 3);
 
+    list.traverse();
+
+    cout << endl;
+
+
+    list2.traverse(); 
+
+    cout << endl;
+
+    mylist::LinkList<int> lists(list);     // 拷贝构造是深拷贝
     mylist::LinkList<int> list3(mylist::merge(list, list2));
-
-
     list3.traverse();
+    mylist::subs(list, list2).traverse();   
 
-
+}
 
 
     cout << endl;

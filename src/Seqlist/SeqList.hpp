@@ -179,7 +179,7 @@ funtion: 根据指定元素定位，首个元素位置
 parameter: 定位元素
 return: 返回位置  没有查找到就返回 0
 */
-    int locate(const ElemType &e) {  // 返回定位的位置  二分搜索
+    int contain(const ElemType &e) {  // 返回定位的位置  二分搜索
         // unsigned int left = a;
         // unsigned int right = length;
         // while (left <= right) {

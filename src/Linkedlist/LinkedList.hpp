@@ -43,10 +43,10 @@ namespace mylist {
         /*
         funtion: 拷贝构造函数
         */
-        LinkList(const LinkList<ElemType> &copy) : m_length(copy.m_length), head_point(new Node<ElemType>){
+        LinkList(const LinkList<ElemType> &rhs) : m_length(0), head_point(new Node<ElemType>){
             head_point->next = nullptr;
-            for (int i = 1; i <= copy.m_length; ++i) {
-                insert(i, copy.getElem(i));
+            for (int i = 1; i <= rhs.m_length; ++i) {
+                insert(i, rhs.getElem(i));
             }
         }
 
@@ -108,7 +108,7 @@ namespace mylist {
         parameter: 传入元素
         return: 找到的位置,若找不到，则返回 0
         */
-        int locate(ElemType x) {
+        int contain(ElemType x) {
             auto traverse_point = head_point->next;
             unsigned int i = 0;
             while (traverse_point != NULL) {
@@ -181,7 +181,7 @@ namespace mylist {
         parameter: position-删除位置
         return: true is successful, false is faild
         */
-        bool deleteElement(int position) {
+        bool deleteElem(int position) {
             if (position < 1 || position > size()) {
                 return false;
             }
@@ -206,7 +206,7 @@ namespace mylist {
         parameter: position-删除位置 element-删除的元素
         return: true is successful, false is faild
         */
-        bool deleteElement(int position, ElemType &element) {
+        bool deleteElem(int position, ElemType &element) {
             if (position < 1 || position > size()) {
                 return false;
             }
@@ -253,7 +253,7 @@ namespace mylist {
          * parameter: length-设置的长度 
          * return: none
          */
-        void setLength(const size_t length) { m_length = length; }
+        void setLength(size_t length) { m_length = length; }
 
         /** 
          * funtion: 根据位置获取元素, 通过 element 获得
@@ -276,7 +276,7 @@ namespace mylist {
         /**
          * funtion: 根据位置获取元素
          * parameter: 位置-position
-         * return: 返回 数据域的引用 , 没有找到则抛出异常
+         * return: 返回 数据域的引用 , 没有找到则抛出异常, 索引长度超出限制
          */
         ElemType& getElem(int position) const {
             auto p = head_point->next;
@@ -294,28 +294,28 @@ namespace mylist {
         /**
          * funtion: 将第 position 个元素设置为 element
          *  parameter: position-位置 element-赋值的元素
-         * return: true is successful, false is faild
+         * return: none
          */
-        bool setElem(int position, const ElemType &element) {
+        void setElem(int position, const ElemType &element) {
             // way 1
             /*
                 if (position < 1 ||  position > length()) {
-                    return false;
+                    return;
                 }
                 auto p = head_point->next;
                 while (--position){
                     p = p->next;
                 }
                 p->data = e;
-                return true;
+                return;
             */
             // way 2
             // /*
             if (position < 1 || position > size()) {
-                return false;
+                return;
             }
             getElem(position) = element;
-            return true;
+            return;
             // */
         }
 
@@ -331,14 +331,14 @@ namespace mylist {
          * parameter: none
          * return: 尾指针
          */
-        Node<ElemType>* getTail() const { return tail_point; }
+        Node<ElemType>* getTail() { return tail_point; }
 
         /**
          * function: 设置尾指针
          * parameter: none
          * return: none
          */
-        Node<ElemType>* &setTail() const { return tail_point; }
+        void setTail(Node<ElemType> *tailPoint) { tail_point = tailPoint; }
     };
 
 /**
@@ -347,30 +347,25 @@ namespace mylist {
  * return: 合并后的链表 
  */ 
 template<typename ElemType>
-LinkList<ElemType> merge(const LinkList<ElemType> lhs, const LinkList<ElemType> rhs) {
+LinkList<ElemType> merge(LinkList<ElemType> lhs, LinkList<ElemType> rhs) {
     if (lhs.isEmpty()) {
         return rhs;
     }
     if (rhs.isEmpty()) {
         return lhs;
     }
-    Node<ElemType> *tailNode = lhs.getTail();
-    tailNode->next = rhs.getHead()->next;              // 左链表尾结点链接右链表的第一个数据结点
-    lhs.setLength(lhs.getLength() + rhs.getLength());     // 更新长度
-    lhs.setTail() = rhs.getTail();                  // 更新尾结点
-
-    return lhs;                                    // 返回副本
-}
-
-
-/**
- * function: 获取两个链表的交集
- * parameter: lhs,rhs 求交集的链表
- * return: 交集
- */
-template<typename ElemType>
-LinkList<ElemType> interSect(const LinkList<ElemType>& lhs, const LinkList<ElemType>& rhs) {
-
+    // rhs 合并到 lhs
+    // auto tailPointOfLeft = lhs.getTail();
+    // tailPointOfLeft->next = rhs.getHead()->next;    // 链接右链表
+    // lhs.setLength(lhs.getLength() + rhs.getLength());
+    // lhs.setTail(rhs.getTail());
+    // return lhs;                       // 返回副本                  // 深浅拷贝问题
+    int tPos = 0, sizeOfLeft = lhs.getLength();
+    
+    while (++tPos <= rhs.getLength()) {
+        lhs.insert(sizeOfLeft + tPos, rhs.getElem(tPos));
+    }
+    return lhs;
 }
 
 
@@ -398,6 +393,45 @@ void sort(const LinkList<ElemType>& list) {
         pt = pt2;
     }
 }
+
+/**
+ * function: 获取两个链表的交集
+ * parameter: lhs,rhs 求交集的链表
+ * return: 交集
+ */
+template<typename ElemType>
+LinkList<ElemType> interSect(LinkList<ElemType>& lhs, LinkList<ElemType>& rhs) {
+    LinkList<ElemType> result;
+    int iPos = 0, tPos = 0;
+    while (++tPos <= lhs.getLength()) {
+        ElemType curValue = lhs.getElem(tPos);
+        if (rhs.contain(curValue)) {
+            result.insert(++iPos, curValue);
+        }
+    } 
+    sort(result);   // 递增顺序
+
+    return result;
+
+}
+
+/**
+ * function: 获取两个链表的差集
+ * parameter: lhs,rhs 求差集的链表
+ * return: 差集
+ */ 
+template<typename ElemType>
+LinkList<ElemType> subs(LinkList<ElemType> lhs, LinkList<ElemType> rhs) {
+    // lhs 的元素不能出现在 rhs 中
+    int tPos = 0;
+    while (++tPos <= lhs.getLength()) {
+        if (rhs.contain(lhs.getElem(tPos))) {
+            lhs.deleteElem(tPos);
+        }
+    }
+    return lhs;
+}
+
 
 }
 
