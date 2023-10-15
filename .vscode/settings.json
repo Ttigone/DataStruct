@@ -69,7 +69,13 @@
         "cstdarg": "cpp",
         "cwctype": "cpp",
         "ratio": "cpp",
-        "numbers": "cpp"
+        "numbers": "cpp",
+        "*.def": "cpp",
+        "ciso646": "cpp",
+        "format": "cpp",
+        "span": "cpp",
+        "*.inc": "cpp",
+        "charconv": "cpp"
     },
     "editor.suggest.snippetsPreventQuickSuggestions": false,
     "aiXcoder.showTrayIcon": true,

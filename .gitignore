@@ -79,4 +79,4 @@ build/
 .vs/
 cmake-build-debug/
 out/
-.vscode/
+.vscode/settings.json

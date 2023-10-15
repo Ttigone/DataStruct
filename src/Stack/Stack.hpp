@@ -9,265 +9,204 @@ using std::cout;
 using std::endl;
 
 
-namespace mySeqStack { // 顺序栈
-template<class ElemType>
+/**
+ * @brief 顺序栈
+ * 
+ * @author C3H3_Ttigone
+ * @date 2023-09-06
+ */
+namespace mySeqStack { 
+
+template<typename T>
 class Stack {
+public:
+    Stack(void);
+    Stack(const Stack<T>& rhs);
+    Stack& operator=(const Stack<T>& rhs);
+    ~Stack(void);
+
+public:
+
+    inline T& top(void);
+    inline const T& top(void) const;
+    inline bool empty(void) const; 
+    inline size_t size(void) const;
+
+    void push(const T& val); 
+    void pop(void); 
+    void clear(); 
+    void resize();
+    void traverse() const; 
+
+private:
+    void copy(const Stack& rhs);  // 没有模板
+
 private:
     int m_top;
     int m_base;
     int max_size;
-    ElemType *data;
-public:
-/*
-funtion: 有参构造函数
-parameter: none
-return:none
-*/
-    Stack(int init_size = 10) : m_top(0), m_base(0), max_size(init_size) {
-        if (init_size <= 0) {
-            throw new std::logic_error("size error");
-        }
-        data = new ElemType[max_size];
-    }
-
-/*
-funtion: 拷贝构造函数
-*/
-    Stack(const Stack<ElemType> &copy) : m_top(0), m_base(0), max_size(copy.max_size) {
-        for (int i = 0; i < copy.size(); ++i) {
-            push(copy.data[i]);
-        }
-    }
-
-/*
-funtion: 析构函数
-parameter: none
-return: none
-*/
-    ~Stack() {
-        delete [] data;
-        data = nullptr;
-    }
-
-/*
-funtion: 返回栈长度
-parameter: none
-return: 长度 length 
-*/
-    constexpr int size() const {
-        return m_top - m_base;
-    }
-
-/*
-funtion: 重新分配长度
-parameter: none
-return: none
-*/
-    void resize() noexcept {
-        std::vector<ElemType> copy;
-        for (int i = 0; i < size(); ++i) {
-            copy.push_back(data[i]);
-        }
-        max_size = max_size + max_size / 2;
-        data = new ElemType[max_size];
-        for (int t = 0; t < size(); ++t) {
-            data[t] = copy[t];
-        }
-    }
-
-/*
-funtion: 判断栈是否为空
-parameter: none
-return: true is empty false is no empty
-*/
-    constexpr bool empty() const {
-        return m_base == m_top;
-    }
-
-/*
-funtion: 清空栈
-parameter: none
-return: none
-*/
-    void clear() {
-        m_top = m_base;
-    }
-
-/*
-funtion: 入栈
-parameter: element-入栈元素 
-return: none 
-*/
-    void push(const ElemType element) {
-        if (m_top - m_base == max_size) {
-            // throw new std::logic_error("size full error");
-            // 追加空间
-            resize();
-        } 
-        data[m_top++] = element;
-    }
-
-
-/*
-funtion: 出栈
-parameter: element-存储出栈元素
-return: true is successful false is faild
-*/
-    bool pop(const ElemType &element) {
-        if (m_top == m_base) {
-            return false;
-        }
-        element = data[m_top--];
-        return true;
-    }
-
-/*
-funtion: 出栈
-parameter: none
-return: true is successful false is faild 
-*/
-    ElemType pop() {
-        if (empty()) {
-            throw new std::logic_error("empty");
-        }
-        return data[--m_top];
-    }
-
-/*
-funtion: 获取栈顶元素
-parameter: none
-return: 栈顶元素
-*/
-    ElemType getTop() {
-        if (m_top > m_base) {
-            int pos = m_top - 1;
-            return data[pos];
-        } else {
-            throw new std::logic_error("get element error");
-        }
-    }
-
-/*
-funtion: 遍历栈
-parameter: none
-return: none
-*/
-    void traverse() {
-        cout << "top ";
-        for (int i = size() - 1; i >= 0; --i) {
-            cout << data[i];
-            if (i != 0) {
-                cout << ", ";
-            }
-        }
-        cout << " base";
-    }
-
+    T *data;
 
 };
 
-} // template class Stack<ElemType> OK
+template<typename T>
+Stack<T>::Stack(void) {
+    m_top = 0;
+    m_base = 0;
+    max_size = 10;
+    data = new T[max_size];
+}
 
+template<typename T>
+Stack<T>::Stack(const Stack<T>& rhs) : m_top(0), m_base(0), max_size(rhs.max_size) {
+    for (int i = 0; i < rhs.size(); ++i) {
+        push(rhs.data[i]);
+    }
+}
+
+template<typename T>
+Stack<T>& Stack<T>::operator=(const Stack<T>& rhs) {
+
+}
+
+template<typename T>
+Stack<T>::~Stack(void) {
+    delete [] data;
+    data = nullptr;
+}
+
+
+template<typename T>
+T& Stack<T>::top() {
+    if (m_top > m_base) {
+        int pos = m_top - 1;
+        return data[pos];
+    } else {
+        throw new std::logic_error("get element error");
+    }
+}
+
+template<typename T>
+const T& Stack<T>::top() const {
+    if (m_top > m_base) {
+        int pos = m_top - 1;
+        return data[pos];
+    } else {
+        throw new std::logic_error("get element error");
+    }
+}
+
+
+template<typename T>
+bool Stack<T>::empty() const {
+    return m_base == m_top;
+}
+
+
+template<typename T>
+size_t Stack<T>::size() const {
+    return m_top - m_base;
+}
+
+template<typename T>
+void Stack<T>::push(const T& val) {
+    if (m_top - m_base == max_size) {
+        // throw new std::logic_error("size full error");
+        // 追加空间
+        resize();
+    } 
+    data[m_top++] = val;
+}
+
+template<typename T>
+void Stack<T>::pop(void) {
+    if (m_top == m_base) {
+        return;
+    }
+    m_top--;
+}
+
+template<typename T>
+void Stack<T>::clear() {
+    m_top = m_base;
+}
+
+template<typename T>
+void Stack<T>::resize() { 
+    std::vector<T> copy;
+    for (int i = 0; i < size(); ++i) {
+        copy.push_back(data[i]);
+    }
+    max_size = max_size + max_size / 2;
+    data = new T[max_size];
+    for (int t = 0; t < size(); ++t) {
+        data[t] = copy[t];
+    }
+}
+
+template<typename T>
+void Stack<T>::traverse() const {
+    cout << "top ";
+    for (int i = size() - 1; i >= 0; --i) {
+        cout << data[i];
+        if (i != 0) {
+            cout << ", ";
+        }
+    }
+    cout << " base";
+}
+
+} // template class Stack<T> OK
+
+
+
+/**
+ * @brief 链栈
+ * 
+ * @author C3H3_Ttigone
+ * @date 2023-09-06
+ */
 namespace myListStack {
 
-template<typename ElemType>
+template<typename T>
 struct StackNode {
-    ElemType data;
-    StackNode<ElemType> *next;
+    T data;
+    StackNode<T> *next;
 };
-template<typename ElemType>
+template<typename T>
 class Stack {
 private: 
-    StackNode<ElemType> *head; // 头结点
-    size_t slength;
+    StackNode<T> *head; // 头结点  其数据域存储链表长度
+
 public:
-/*
-funtion: 默认构造函数
-*/
+    Stack();
+    Stack(const Stack<T> &rhs);
+    ~Stack();
 
-    Stack() : head(new StackNode<ElemType>), slength(0) {
-        head->next = nullptr;
-    }
+    inline T& top(void);
+    inline const T& top(void) const;
+    inline bool empty(void) const;
+    inline size_t size(void) const;
 
-/*
-funtion: 拷贝构造函数
-*/
-    Stack(const Stack<ElemType> &copy) : head(new StackNode<ElemType>), slength(0) {
-        head->next = nullptr;
-        auto clength = copy.length();
-        for (int i = 0; i < clength; ++i) {
-            push(copy.get(clength - i - 1));
-        }
-    }
+    void push(const T &val);
+    void pop(int i = 1);
+    void clear();
+    void traverse() const; 
+
+private: 
+    void copy(const Stack<T> &rhs);
 
 
-/*
-funtion: 析构函数
-*/
-    ~Stack() {
-        while (!isEmpty()) {
-            pop();
-        }
-    }
 
-/*
-funtion: 判断是否为空
-*/
-    constexpr bool isEmpty() const {
-        return head->next == nullptr;
-    }
-
-/*
-funtion: 返回长度
-*/
-    constexpr size_t length() const {
-        return slength;
-    }
-
-/*
-funtion: 入栈
-*/
-    void push(const ElemType &element) {
-        StackNode<ElemType> *newNode = new StackNode<ElemType>;
-        newNode->data = element;
-        newNode->next = head->next;
-        head->next = newNode;
-        ++slength;
-    }
-
-/*
-funtion: 出栈
-*/
-    void pop(int i = 1) {
-        if (isEmpty()) {
-            throw std::runtime_error("Stack is empty");
-        }
-        auto deleteNode = head->next;
-        head->next = deleteNode->next;
-        delete deleteNode;
-        deleteNode = nullptr;
-        --slength;
-    }
-
-/*
-funtion: 遍历栈
-*/
-    void traverse() const {
-        auto traverseNode = head->next;
-        while (traverseNode) {
-            cout << traverseNode->data << " ";
-            traverseNode = traverseNode->next;
-        }
-    }
-
+public:
 /*
 funtion: 获取特定位置的元素
 */
-    ElemType get(int i = 0) const {
-        if (isEmpty()) {
+    T get(int i = 0) const {
+        if (empty()) {
             throw std::runtime_error("Stack is empty");
         }
-        if (i >= length()) {
+        if (i >= size()) {
             cout << "y";
             throw std::runtime_error("Index out of range");
         }
@@ -278,9 +217,85 @@ funtion: 获取特定位置的元素
         return recordNode->data;
     }
 
-
-
 };
+
+
+template<typename T>
+Stack<T>::Stack() : head(new StackNode<T>) {
+    head->next = nullptr;
+    head->data = 0;
+}
+
+template<typename T>
+Stack<T>::Stack(const Stack<T> &rhs) : head(new StackNode<T>) {
+    head->next = nullptr;
+    head->data = 0;
+    for (int i = 0; i < rhs.size(); ++i) {
+        push(rhs.get(rhs.size() - i - 1));
+    }
+}
+
+template<typename T>
+Stack<T>::~Stack() {
+    while (!empty()) {
+        pop();
+    }
+}
+
+template<typename T>
+T& Stack<T>::top(void) {
+
+}
+
+template<typename T>
+const T& Stack<T>::top(void) const {
+
+}
+
+template<typename T>
+bool Stack<T>::empty(void) const { 
+    return head->next == nullptr; 
+}
+
+template<typename T>
+size_t Stack<T>::size() const {
+    return head->data; 
+}
+
+template<typename T>
+void Stack<T>::push(const T &val) {
+    StackNode<T> *newNode = new StackNode<T>;
+    newNode->data = val;
+    newNode->next = head->next;
+    head->next = newNode;
+    ++head->data;
+}
+
+template<typename T>
+void Stack<T>::pop(int i) {
+    if (empty()) {
+        throw std::runtime_error("Stack is empty");
+    }
+    auto deleteNode = head->next;
+    head->next = deleteNode->next;
+    delete deleteNode;
+    deleteNode = nullptr;
+    --head->data;
+}
+
+template<typename T>
+void Stack<T>::clear() {
+
+}
+
+template<typename T>
+void Stack<T>::traverse() const {
+    auto traverseNode = head->next;
+    while (traverseNode) {
+        cout << traverseNode->data << " ";
+        traverseNode = traverseNode->next;
+    }
+}
 
 }
 
