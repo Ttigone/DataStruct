@@ -43,22 +43,20 @@ public:
     friend const LinkList<T>& sort<>(LinkList<T>& list);
     friend LinkList<T> interSect<>(LinkList<T>& lhs, LinkList<T>& rhs);
     friend LinkList<T> subs<>(LinkList<T> lhs, LinkList<T> rhs);
-public:
 
+public:
     LinkList(void);
     LinkList(T target_[], int n);
     LinkList(const LinkList& rhs);
     ~LinkList(void);
 
 private:
-
     inline T& getElem(int pos);
     inline const T& getElem(int pos) const;
 
 public:
-
-    inline bool empty(void) const { return m_length == 0; }
-    inline int size(void) const { return this->m_length; }
+    inline bool empty(void) const noexcept { return m_length == 0; }
+    inline int size(void) const noexcept { return this->m_length; }
 
     void clear(void); 
     unsigned contain(const T& x);
@@ -104,15 +102,11 @@ LinkList<T>::ListItem::ListItem(const T& val, ListItem* next) {
 }
 
 
-// template<typename T>
-// LinkList<T>::LinkList() : m_length(0), head_point(new Node<T>), tail_point(head_point)
-// { head_point->next = nullptr; }
 
 template<typename T>
 LinkList<T>::LinkList() : m_length(0), 
                         head(ListItem(0, nullptr)), 
-                        tail(ListItem(0, nullptr)) { 
-                        }
+                        tail(ListItem(0, nullptr)) { }
 
 template<typename T>
 LinkList<T>::LinkList(T target_[], int n) : LinkList() {
