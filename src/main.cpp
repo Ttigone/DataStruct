@@ -94,49 +94,29 @@ int main()
 
 
 
-    // int a[] = {1, 23, 12, 2, 9, 5};
-    // mylist::LinkList<int> list2(a, sizeof(a) / sizeof(int));
-    // cout << "list2 链表元素为：";
-    // list2.traverse();
-    // cout << endl;
-
-    // mylist::LinkList<int> list3(mylist::merge(list, list2));
-    // cout << "合并之后的链表 list3 元素为：";
-    // list3.traverse();
-    // cout << endl;
-
-    // cout << "list 链表排序后元素为：";
-    // mylist::sort(list).traverse();
-    // cout << endl;
-
-    // cout << "list 和 list2 的交集为：";
-    // mylist::interSect(list, list2).traverse();
-    // cout << endl;
-
-    // cout << "list 和 list3 的差集为：";
-    // mylist::subs(list, list3).traverse();
-    // cout << endl;
-    
-
-
-    list.addToHead(34);
-    list.addToHead(34);
-
-    list.addToTail(121);
-    list.addToTail(121);
-
-    list.traverse();
-
-    mylist::LinkList<int> list2;
-    list2.insert(1, 3);
-    list2.insert(2, 1);
+    int a[] = {1, 23, 12, 2, 9, 5};
+    mylist::LinkList<int> list2(a, sizeof(a) / sizeof(int));
+    cout << "list2 链表元素为：";
+    list2.traverse();
     cout << endl;
 
-    list2.traverse();
-
-
-    mylist::LinkList<int> list3(mylist::merge(list2, list));
+    mylist::LinkList<int> list3(mylist::merge(list, list2));
+    cout << "合并之后的链表 list3 元素为：";
     list3.traverse();
+    cout << endl;
+
+    cout << "list 链表排序后元素为：";
+    mylist::sort(list).traverse();
+    cout << endl;
+
+    cout << "list 和 list2 的交集为：";
+    mylist::interSect(list, list2).traverse();
+    cout << endl;
+
+    cout << "list 和 list3 的差集为：";
+    mylist::subs(list, list3).traverse();
+    cout << endl;
+    
 
 
     cout << endl;

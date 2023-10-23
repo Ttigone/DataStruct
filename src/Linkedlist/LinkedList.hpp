@@ -16,7 +16,7 @@ using std::endl;
  * @brief 链表
  */
 namespace mylist {
-
+    
 template <typename T>
 class LinkList;
 
@@ -27,7 +27,7 @@ template <typename T>
 LinkList<T> merge(LinkList<T> lhs, LinkList<T> rhs);
 
 template<typename T>
-const LinkList<T>& sort(const LinkList<T>& list);
+const LinkList<T>& sort(LinkList<T>& list);
 
 template<typename T>
 LinkList<T> interSect(LinkList<T>& lhs, LinkList<T>& rhs);
@@ -40,7 +40,7 @@ template<class T>
 class LinkList {
 public:
     friend LinkList<T> merge<>(LinkList<T> lhs, LinkList<T> rhs); 
-    friend const LinkList<T>& sort<>(const LinkList<T>& list);
+    friend const LinkList<T>& sort<>(LinkList<T>& list);
     friend LinkList<T> interSect<>(LinkList<T>& lhs, LinkList<T>& rhs);
     friend LinkList<T> subs<>(LinkList<T> lhs, LinkList<T> rhs);
 public:
@@ -57,8 +57,6 @@ private:
 
 public:
 
-    inline ListItem<T>* getHead(void) const { return head.next; }
-    inline ListItem<T>* getTail(void) { return tail.next; }
     inline bool empty(void) const { return m_length == 0; }
     inline int size(void) const { return this->m_length; }
 
@@ -87,7 +85,6 @@ private:
         ListItem *next = nullptr;
         T data;
     };
-
 private:
     size_t m_length;
     ListItem head;
@@ -114,7 +111,8 @@ LinkList<T>::ListItem::ListItem(const T& val, ListItem* next) {
 template<typename T>
 LinkList<T>::LinkList() : m_length(0), 
                         head(ListItem(0, nullptr)), 
-                        tail(ListItem(0, nullptr)) { }
+                        tail(ListItem(0, nullptr)) { 
+                        }
 
 template<typename T>
 LinkList<T>::LinkList(T target_[], int n) : LinkList() {
@@ -152,6 +150,14 @@ const T& LinkList<T>::getElem(int pos) const {
     }
     return traversePoint->data;
 }
+
+// template<typename T>
+// auto LinkList<T>::getHead(void) const ->decltype(head.next) { 
+//     return head.next; 
+// }
+
+// template<typename T>
+// ListItem<T>* LinkList<T>::getTail(void) { return tail.next; }
 
 template<typename T>
 void LinkList<T>::clear(void) {
@@ -267,20 +273,6 @@ void LinkList<T>::traverse() const {
 
 template<typename T>
 void LinkList<T>::setElem(int pos, const T& val) {
-    // way 1
-    /*
-        if (position < 1 ||  position > length()) {
-            return;
-        }
-        auto p = head_point->next;
-        while (--position){
-            p = p->next;
-        }
-        p->data = e;
-        return;
-    */
-    // way 2
-    // /*
     if (pos < 1 || pos > size()) {
         return;
     }
@@ -313,18 +305,19 @@ LinkList<T> merge(LinkList<T> lhs, LinkList<T> rhs) {
  * function: 排序单链表
  * parametet: list-排序目标
  * return: none
- */ 
+ */
 template<typename T>
-const LinkList<T>& sort(const LinkList<T>& list) {
-    // Node<T> *pt = head_point->next->next;
-    auto listHeader = list.getHead();
-    Node<T> *pt = listHeader->next->next;
-    Node<T> *pt2 = nullptr;
-    Node<T> *pre = nullptr;
-    listHeader->next->next = nullptr;
+const LinkList<T>& sort(LinkList<T>& list) {
+    auto listHeader = &list.head;
+    auto pt = listHeader->next->next;   // 指向首元结点下一结点的指针
+    auto pt2 = pt;
+    pt2 = nullptr;
+    auto pre = listHeader;
+    pre = nullptr;
+    listHeader->next->next = nullptr;   // 当前链表只有一个首元结点，其指针域为
     while (pt != nullptr) {        // 只有一个数据时，不参加排序
-        pt2 = pt->next;  
-        pre = listHeader;
+        pt2 = pt->next;
+        pre = listHeader;        // 每次获取弄好的新链表头结点
         while (pre->next != nullptr && pre->next->data < pt->data) {
             pre = pre->next;
         }
@@ -334,6 +327,7 @@ const LinkList<T>& sort(const LinkList<T>& list) {
     }
     return list;
 }
+
 
 /**
  * function: 获取两个链表的交集
@@ -367,7 +361,8 @@ LinkList<T> subs(LinkList<T> lhs, LinkList<T> rhs) {
         if (rhs.contain(lhs.getElem(tPos))) {
             // 如果 rhs 中包含了 lhs 的元素，则删除 lhs 中的元素
             // 更新 tPos 指向的位置
-            lhs.deleteElem(tPos--);  
+            // lhs.deleteElem(tPos--);  
+            lhs.erase(tPos--);  
         }
     }
     return lhs;
