@@ -7,82 +7,125 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-
-template<typename T>
-struct Node {
-    T data;
-    Node<T> *next;
-};
-
 /**
- * @brief 链表
+ * @date 2023-06-15
  * 
  * @author C3H3_Ttigone
- * @date 2023-06-15
+ * @Contact caicaishaoshan@gmail.com
+ * 
+ * @brief 链表
  */
 namespace mylist {
+
+template <typename T>
+class LinkList;
+
+template <typename T>
+struct ListItem;
+
+template <typename T>
+LinkList<T> merge(LinkList<T> lhs, LinkList<T> rhs);
+
+template<typename T>
+const LinkList<T>& sort(const LinkList<T>& list);
+
+template<typename T>
+LinkList<T> interSect(LinkList<T>& lhs, LinkList<T>& rhs);
+
+template<typename T>
+LinkList<T> subs(LinkList<T> lhs, LinkList<T> rhs);
+
+
 template<class T>
 class LinkList {
+public:
+    friend LinkList<T> merge<>(LinkList<T> lhs, LinkList<T> rhs); 
+    friend const LinkList<T>& sort<>(const LinkList<T>& list);
+    friend LinkList<T> interSect<>(LinkList<T>& lhs, LinkList<T>& rhs);
+    friend LinkList<T> subs<>(LinkList<T> lhs, LinkList<T> rhs);
 public:
 
     LinkList(void);
     LinkList(T target_[], int n);
-    LinkList(const LinkList<T> &rhs);
+    LinkList(const LinkList& rhs);
     ~LinkList(void);
+
+private:
+
+    inline T& getElem(int pos);
+    inline const T& getElem(int pos) const;
 
 public:
 
-    inline Node<T>* getHead(void) const { return head_point; }
-    inline Node<T>* getTail(void) { return tail_point; }
-    inline bool getElem(int position, T &element) const; 
-    inline T& getElem(int position);
-    inline const T& getElem(int position) const;
+    inline ListItem<T>* getHead(void) const { return head.next; }
+    inline ListItem<T>* getTail(void) { return tail.next; }
     inline bool empty(void) const { return m_length == 0; }
     inline int size(void) const { return this->m_length; }
 
     void clear(void); 
-    int contain(T x);
-    bool insert(int position, const T &element); 
-    bool addToHead(const T &element);
-    bool addToTail(const T &element);
+    unsigned contain(const T& x);
+    void insert(int pos, const T& val); 
+    void addToHead(const T& val);
+    void addToTail(const T& val);
+    void erase(int pos);
+    void erase(int first, int last);
     void remove(const T& val);
-    bool deleteElem(int position);
-    bool deleteElem(int position, T &element);
-    void traverse() const;
+    void traverse(void) const;
 
     void setLength(size_t length) { m_length = length; }
-    void setElem(int position, const T &element); 
-    void setTail(Node<T> *tailPoint) { tail_point = tailPoint; }
-
+    void setElem(int pos, const T& val); 
+    // void setTail(Node<T> *tailPoint) { tail_point = tailPoint; }
 
 private:
-    // struct Node {
-    //     T data;
-    //     Node<T> *next;
-    // };
+    struct ListItem {
+    public:
+        ListItem(void);
+        ListItem(const T& val, ListItem *next = nullptr);
+    public:
+        ListItem& operator=(ListItem& rhs) = delete;
+    public:
+        ListItem *next = nullptr;
+        T data;
+    };
 
+private:
     size_t m_length;
-    Node<T> *head_point;
-    Node<T> *tail_point;
+    ListItem head;
+    ListItem tail;
+
 };
 
+template<typename T>
+LinkList<T>::ListItem::ListItem(void) {
+    data = T();
+}
 
 template<typename T>
-LinkList<T>::LinkList() : m_length(0), head_point(new Node<T>), tail_point(head_point)
-{ head_point->next = nullptr; }
+LinkList<T>::ListItem::ListItem(const T& val, ListItem* next) {
+    data = val;
+    this->next = next;
+}
+
+
+// template<typename T>
+// LinkList<T>::LinkList() : m_length(0), head_point(new Node<T>), tail_point(head_point)
+// { head_point->next = nullptr; }
 
 template<typename T>
-LinkList<T>::LinkList(T target_[], int n) : m_length(0), head_point(new Node<T>) {
-    head_point->next = nullptr;
+LinkList<T>::LinkList() : m_length(0), 
+                        head(ListItem(0, nullptr)), 
+                        tail(ListItem(0, nullptr)) { }
+
+template<typename T>
+LinkList<T>::LinkList(T target_[], int n) : LinkList() {
     for (int i = 0; i < n; ++i) {
         insert(i + 1, target_[i]);  // 可能会造成越界
     }
 }
 
 template<typename T>
-LinkList<T>::LinkList(const LinkList<T> &rhs) : m_length(0), head_point(new Node<T>){
-    head_point->next = nullptr;
-    for (int i = 1; i <= rhs.m_length; ++i) {
+LinkList<T>::LinkList(const LinkList<T>& rhs) : LinkList() {
+    for (int i = 1; i <= rhs.size(); ++i) {
         insert(i, rhs.getElem(i));
     }
 }
@@ -90,130 +133,118 @@ LinkList<T>::LinkList(const LinkList<T> &rhs) : m_length(0), head_point(new Node
 template<typename T>
 LinkList<T>::~LinkList() {
     clear();
-    delete head_point;
-    head_point = tail_point = nullptr;
 }
 
 template<typename T>
-bool LinkList<T>::getElem(int position, T &element) const {
-    auto traverse_point = head_point->next;
-    while (--position && traverse_point != NULL) {
-        traverse_point = traverse_point->next;
+T& LinkList<T>::getElem(int pos) {
+    auto traversePoint = head.next;
+    while (--pos) {
+        traversePoint = traversePoint->next;
     }
-    if (traverse_point != NULL) {
-        element = traverse_point->data;
-        return true;
-    } else {
-        throw "arg error";
-    }
+    return traversePoint->data;
 }
 
 template<typename T>
-const T& LinkList<T>::getElem(int position) const {
-    auto p = head_point->next;
-    while (--position && p != NULL) {
-        p = p->next;
+const T& LinkList<T>::getElem(int pos) const {
+    auto traversePoint = head.next;
+    while (--pos) {
+        traversePoint = traversePoint->next;
     }
-    if (p != NULL) {
-        return p->data;
-    } else {
-        throw "arg error";
-    }
-}
-
-template<typename T>
-T& LinkList<T>::getElem(int position) {
-    auto p = head_point->next;
-    while (--position && p != NULL) {
-        p = p->next;
-    }
-    if (p != NULL) {
-        return p->data;
-    } else {
-        throw "arg error";
-    }
+    return traversePoint->data;
 }
 
 template<typename T>
 void LinkList<T>::clear(void) {
-    // way 1
-    /*
-        while(!isEmpty()) {
-            delete_element(1);
-        }
-    */
-
-
-    // way 2
-    auto traverse_point = head_point->next;  // 从头部开始删除
-    while (traverse_point) {
-        auto delete_point = traverse_point;
-        head_point->next = delete_point->next;
-        traverse_point = traverse_point->next;  // 一旦 traverse_point 被赋值为 nullptr,说明正在删除最后一个节点
-        if (traverse_point == nullptr) {
-            tail_point = head_point;
-        }
-        delete delete_point;
-        delete_point = nullptr;
-        --m_length;
-    }
+    erase(1, size() + 1);
 }
 
 template<typename T>
-int LinkList<T>::contain(T x) {
-    auto traverse_point = head_point->next;
+unsigned LinkList<T>::contain(const T& x) {
+    auto traversePoint = head.next;
     unsigned int i = 0;
-    while (traverse_point != NULL) {
+    while (traversePoint != NULL) {
         ++i;
-        if (traverse_point->data == x) {
+        if (traversePoint->data == x) {
             return i;
         } else {
-            traverse_point = traverse_point->next;
+            traversePoint = traversePoint->next;
         }
     }
     return 0;
 }
 
 template<typename T>
-bool LinkList<T>::insert(int position, const T &element) {
-    int keep_position = position;
-    if (position < 1 || position > size() + 1) {
-        return false;
+void LinkList<T>::insert(int pos, const T& val) {
+    size_t keepPosition = pos--;
+    if (pos < 0 || pos > size()) {
+        return;
     }
-    auto traverse_point = head_point;
-    while (--position) {
-        traverse_point = traverse_point->next;
-    }
-    auto new_point = new (Node<T>);
-    new_point->data = element;
-    new_point->next = traverse_point->next;
-    traverse_point->next = new_point;
-    if (keep_position == size() + 1) {
-        tail_point = new_point;        // tail_point 指向最后一个元素
+    auto traversePoint = head.next;
+    if (pos == 0) {
+        auto newPoint = new ListItem(val, traversePoint);
+        head.next = newPoint;
+        tail.next = newPoint;        // tail_point 指向最后一个元素
+    } else {
+        while (--pos) {
+            traversePoint = traversePoint->next;
+        }
+        auto newPoint = new ListItem(val, traversePoint->next);
+        traversePoint->next = newPoint;
+        if (keepPosition == size() + 1) {
+            tail.next = newPoint; 
+        }
     }
     ++m_length;
-    return true;
 }
 
 template<typename T>
-bool LinkList<T>::addToHead(const T &element) {
-    Node<T> *new_point = new (Node<T>);
-    new_point->data = element;
-    new_point->next = head_point->next;
-    head_point->next = new_point;
+void LinkList<T>::addToHead(const T& val) {
+    auto newPoint = new ListItem(val, head.next);
+    head.next = newPoint;
     ++m_length;
-    return true;
 }
 
 template<typename T>
-bool LinkList<T>::addToTail(const T &element) {
-    Node<T> *new_point = new (Node<T>);
-    new_point->data = element;
-    new_point->next = tail_point->next; // nullptr 的传递
-    tail_point->next = new_point;        // 链接新节点
-    tail_point = new_point;       // tail_point 指向最后一个元素
+void LinkList<T>::addToTail(const T& val) {
+    auto newPoint = new ListItem(val, (tail.next)->next);
+    (tail.next)->next = newPoint;
+    tail.next = newPoint;
     ++m_length;
-    return true;
+}
+
+template<typename T>
+void LinkList<T>::erase(int pos) {          // 返回迭代器
+    size_t keepPosition = pos--;
+    if (pos < 0 || pos > size()) {
+        return;
+    }
+    auto traversePoint = head.next;
+    if (pos == 0) {  // 删除的是第一个元素
+        auto deletePoint = traversePoint;   
+        head.next = traversePoint->next;
+        delete deletePoint;
+        deletePoint = nullptr;
+    } else {
+        while (--pos) {
+            traversePoint = traversePoint->next;
+        }
+        auto deletePoint = traversePoint->next;
+        traversePoint->next = deletePoint->next;
+        if (keepPosition == size()) {  // 删除的是最后一个元素
+            tail.next = traversePoint->next;   // tail_point 指向最后一个元素
+        }
+        delete deletePoint;
+        deletePoint = nullptr;
+    }
+    --m_length;
+}
+
+template<typename T>
+void LinkList<T>::erase(const int first, const int last) {  // 左闭右开     // 返回迭代器
+    size_t deleteCount = last - first;
+    while (deleteCount-- > 0) {
+        erase(first);
+    }
 }
 
 template<typename T>
@@ -222,64 +253,20 @@ void LinkList<T>::remove(const T& val) {
 
 }
 
-template<typename T>
-bool LinkList<T>::deleteElem(int position) {
-    if (position < 1 || position > size()) {
-        return false;
-    }
-    int keep_position = position;
-    auto traverse_point = head_point;
-    while (--position) {
-        traverse_point = traverse_point->next;
-    }
-    auto delete_point = traverse_point->next;
-    traverse_point->next = delete_point->next;
-    if (keep_position == size()) {  // 删除的是最后一个元素
-        tail_point = traverse_point;   // tail_point 指向最后一个元素
-    }
-    delete delete_point;
-    delete_point = nullptr;
-    --m_length;
-    return true;
-}
-
-// erase  
-template<typename T>
-bool LinkList<T>::deleteElem(int position, T &element) {
-    if (position < 1 || position > size()) {
-        return false;
-    }
-    int keep_position = position;
-    auto traverse_point = head_point;
-    while (--position) {
-        traverse_point = traverse_point->next;
-    }
-    auto Delete_point = traverse_point->next;
-    element = Delete_point->data;
-    traverse_point->next = Delete_point->next;
-    if (keep_position == size()) {
-        tail_point = traverse_point;
-    }
-    delete Delete_point;
-    Delete_point = nullptr;
-    --m_length;
-    return true;
-}
-
 
 template<typename T>
 void LinkList<T>::traverse() const {
-    auto traverse_point = head_point->next;
-    while (traverse_point != NULL) {
-        cout << traverse_point->data << " ";
-        traverse_point = traverse_point->next;
+    auto traversePoint = head.next;
+    while (traversePoint != NULL) {
+        cout << traversePoint->data << " ";
+        traversePoint = traversePoint->next;
     }
     cout << endl;
 }
 
 
 template<typename T>
-void LinkList<T>::setElem(int position, const T &element) {
+void LinkList<T>::setElem(int pos, const T& val) {
     // way 1
     /*
         if (position < 1 ||  position > length()) {
@@ -294,10 +281,10 @@ void LinkList<T>::setElem(int position, const T &element) {
     */
     // way 2
     // /*
-    if (position < 1 || position > size()) {
+    if (pos < 1 || pos > size()) {
         return;
     }
-    getElem(position) = element;
+    getElem(pos) = val;
     return;
 }
 
