@@ -50,10 +50,6 @@ public:
     LinkList(const LinkList& rhs);
     ~LinkList(void);
 
-private:
-    inline T& getElem(int pos);
-    inline const T& getElem(int pos) const;
-
 public:
     inline bool empty(void) const noexcept { return m_length == 0; }
     inline int size(void) const noexcept { return this->m_length; }
@@ -61,8 +57,8 @@ public:
     void clear(void); 
     unsigned contain(const T& x);
     void insert(int pos, const T& val); 
-    void addToHead(const T& val);
-    void addToTail(const T& val);
+    void push_front(const T& val);
+    void push_back(const T& val);
     void erase(int pos);
     void erase(int first, int last);
     void remove(const T& val);
@@ -70,7 +66,10 @@ public:
 
     void setLength(size_t length) { m_length = length; }
     void setElem(int pos, const T& val); 
-    // void setTail(Node<T> *tailPoint) { tail_point = tailPoint; }
+
+private:
+    inline T& getElem(int pos);
+    inline const T& getElem(int pos) const;
 
 private:
     struct ListItem {
@@ -96,8 +95,7 @@ LinkList<T>::ListItem::ListItem(void) {
 }
 
 template<typename T>
-LinkList<T>::ListItem::ListItem(const T& val, ListItem* next) {
-    data = val;
+LinkList<T>::ListItem::ListItem(const T& val, ListItem* next) : data(val) {
     this->next = next;
 }
 
@@ -127,31 +125,6 @@ LinkList<T>::~LinkList() {
     clear();
 }
 
-template<typename T>
-T& LinkList<T>::getElem(int pos) {
-    auto traversePoint = head.next;
-    while (--pos) {
-        traversePoint = traversePoint->next;
-    }
-    return traversePoint->data;
-}
-
-template<typename T>
-const T& LinkList<T>::getElem(int pos) const {
-    auto traversePoint = head.next;
-    while (--pos) {
-        traversePoint = traversePoint->next;
-    }
-    return traversePoint->data;
-}
-
-// template<typename T>
-// auto LinkList<T>::getHead(void) const ->decltype(head.next) { 
-//     return head.next; 
-// }
-
-// template<typename T>
-// ListItem<T>* LinkList<T>::getTail(void) { return tail.next; }
 
 template<typename T>
 void LinkList<T>::clear(void) {
@@ -198,14 +171,14 @@ void LinkList<T>::insert(int pos, const T& val) {
 }
 
 template<typename T>
-void LinkList<T>::addToHead(const T& val) {
+void LinkList<T>::push_front(const T& val) {
     auto newPoint = new ListItem(val, head.next);
     head.next = newPoint;
     ++m_length;
 }
 
 template<typename T>
-void LinkList<T>::addToTail(const T& val) {
+void LinkList<T>::push_back(const T& val) {
     auto newPoint = new ListItem(val, (tail.next)->next);
     (tail.next)->next = newPoint;
     tail.next = newPoint;
@@ -274,6 +247,23 @@ void LinkList<T>::setElem(int pos, const T& val) {
     return;
 }
 
+template<typename T>
+T& LinkList<T>::getElem(int pos) {
+    auto traversePoint = head.next;
+    while (--pos) {
+        traversePoint = traversePoint->next;
+    }
+    return traversePoint->data;
+}
+
+template<typename T>
+const T& LinkList<T>::getElem(int pos) const {
+    auto traversePoint = head.next;
+    while (--pos) {
+        traversePoint = traversePoint->next;
+    }
+    return traversePoint->data;
+}
 
 /**
  * function: 合并链表

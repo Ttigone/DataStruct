@@ -64,10 +64,7 @@ include(GNUInstallDirs)
 include(GenerateExportHeader)
 
 add_subdirectory(src) #  这行代码搜索 src 文件夹，执行
-# add_subdirectory(src/Seqlist)
 
-#  include (TestBigEndian)
-#  test_big_endian(IS_BIG_ENDIAN)
 
 
 

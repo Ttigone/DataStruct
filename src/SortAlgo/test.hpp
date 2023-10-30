@@ -1,10 +1,4 @@
-
-
 #include <time.h>
-
-
-
-
 
 namespace SortTest {
 

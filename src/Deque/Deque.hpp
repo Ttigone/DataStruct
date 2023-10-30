@@ -7,14 +7,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-template<typename T>
-struct DequeItem;
-template <class T>
-struct QNode {
-    T data;
-    QNode *next;
-};
-
 /**
  * @date 2023-08-15
  * 
@@ -26,6 +18,13 @@ struct QNode {
 namespace myqueue {
 
 template<typename T>
+class Deque;
+
+template<typename T>
+struct DequeItem;
+
+
+template<typename T>
 class Deque {
 public:
     Deque(void);
@@ -35,7 +34,6 @@ public:
 public:
     inline bool empty(void) const noexcept { return m_length == 0; };
     inline size_t size(void) const noexcept { return m_length; };
-    // inline DequeItem * begin();
 
 public:
     void clear(void);
@@ -46,8 +44,10 @@ public:
     void push_front(const T& val);
     void erase(int pos);
     void erase(int first, int last);
-
     void traverse(void) const;
+
+private:
+    const T& at(int pos) const;    // 下标
 
 private: 
     struct DequeItem {
@@ -63,8 +63,6 @@ private:
 
 private:
     size_t m_length;
-    QNode<T> *head_point;
-    QNode<T> *tail_point;
     DequeItem head;
     DequeItem tail;
 
@@ -86,86 +84,65 @@ template<typename T>
 Deque<T>::Deque() : m_length(0), head(DequeItem(0)), tail(DequeItem(0)) { }
 
 template<typename T>
-Deque<T>::Deque(const Deque<T> &rhs) : Deque() {   // 委托构造
-    // head_point->next = nullptr; 
-    // QNode<T> *copy_point = (copy.head_point)->next;
-    // if (!copy_point) {
-    // } else {
-    //     for (int i = 0; i < copy.m_length; ++i) {
-    //         in_queue(copy_point->data);   // 会增加长度
-    //         copy_point = copy_point->next;
-    //     }  // 最后 copy_point 是 nullptr
-    // }
-
+Deque<T>::Deque(const Deque &rhs) : Deque() {   // 委托构造
+    for (int i = 0; i < rhs.size(); ++i) {
+        push_back(rhs.at(i));
+    }
 }   
 
 template <typename T>
 Deque<T>::~Deque() {
     clear();
-    delete head_point;
-    head_point = tail_point = nullptr;
 }
 
 template<typename T>
 void Deque<T>::clear() {  // NOTE  逐步释放队列中的元素
-    QNode<T> *clear_point = new QNode<T>;
-    clear_point = head_point->next;
-    while (clear_point != nullptr) {   
-        auto delete_point = clear_point;
-        head_point->next = clear_point->next;
-        clear_point = head_point->next;
-        delete delete_point;   
-        delete_point = nullptr;
-    }
-    m_length = 0;
-    tail_point = head_point;
+    erase(1, size() + 1);
 }
 
 template<typename T>
 void Deque<T>::insert(int pos, const T& val) {
-
+    size_t keepPosition = pos--;
+    if (pos < 0 || pos > size()) {
+        return;
+    }
+    auto traversePoint = head.next;
+    if (pos == 0) {
+        auto newPoint = new DequeItem(val, traversePoint);
+        head.next = newPoint;
+        tail.next = newPoint;        // tail_point 指向最后一个元素
+    } else {
+        while (--pos) {
+            traversePoint = traversePoint->next;
+        }
+        auto newPoint = new DequeItem(val, traversePoint->next);
+        traversePoint->next = newPoint;
+        if (keepPosition == size() + 1) {
+            tail.next = newPoint; 
+        }
+    }
+    ++m_length;
 }
 
 template<typename T>
 void Deque<T>::pop_back(void) {
-    // if (empty()) {
-    //     throw new std::logic_error("size error");
-    // }
-    // QNode<T> delete_point = new QNode<T>;
-    // delete_point = head_point->next;   // 指向出队元素
-    // element = delete_point->data;
-    // head_point->next = delete_point->next;   // 头结点指向被删除节点的下一节点
-    // delete delete_point;
-    // delete_point = nullptr;
-    // --m_length;   // 长度减 1
-    // if (head_point->next == nullptr) {  // 当只有一个数据节点，且被删除时
-    //     tail_point = head_point;
-    // }
-    // return true;
+    erase(size());
 }
 
 template<typename T>
 void Deque<T>::pop_front(void) {
-
+    erase(1);
 }
 
 template<typename T>
 void Deque<T>::push_back(const T& val) {
-    // QNode<T> *new_point = new QNode<T>;
-    // new_point->data = element;   // 存储数据域
-    // new_point->next = tail_point->next;   // nullptr 的传递
-    // tail_point->next = new_point;  // 链接新节点
-    // tail_point = new_point;   // 尾指针指向最后一个元素
-    // ++m_length;   // 长度 + 1
-    // return true;
-    // DequeItem *newPoint = new DequeItem(val, tail.next);
-    // tail.next = newPoint;
-    DequeItem *traversePoint = &head;
-    
-    DequeItem *newPoint = new DequeItem(val, traversePoint->next);
-    // DequeItem *newPoint = new DequeItem(val, head.next);
-    // head.next = newPoint;
-    traversePoint->next = newPoint;
+    if (tail.next == nullptr) {
+        insert(1, val);
+        return;
+    }
+    DequeItem *newPoint = new DequeItem(val, (tail.next)->next);
+    (tail.next)->next = newPoint;
+    tail.next = newPoint;
     ++m_length;
 }
 
@@ -178,11 +155,29 @@ void Deque<T>::push_front(const T& val) {
 
 template<typename T>
 void Deque<T>::erase(int pos) {
-
+    if ((pos < 1 && pos > size()) || empty()) {
+        return;
+    }
+    auto traversePoint = &head;
+    while (--pos) {                  // 获取指向定位结点的前一个结点指针
+        traversePoint = traversePoint->next;
+    }
+    auto deletePoint = traversePoint->next;
+    traversePoint->next = deletePoint->next;
+    delete deletePoint;
+    deletePoint = nullptr;
+    --m_length;
+    if (empty()) {
+        tail.next = nullptr;
+    }
 }
-template<typename T>
-void Deque<T>::erase(int first, int last) {
 
+template<typename T>
+void Deque<T>::erase(int first, int last) {  // 做闭右开
+    size_t deleteCount = last - first;
+    while (deleteCount--) {
+        erase(first);
+    }
 }
 
 template<typename T>
@@ -203,24 +198,15 @@ void Deque<T>::traverse(void) const {
     cout << " tail";
 }
 
+template<typename T>
+const T& Deque<T>::at(int pos) const {   // 下标
+    auto traversePoint = head.next;
+    while (pos--) {
+        traversePoint = traversePoint->next;
+    }
+    return traversePoint->data;
 
-
-// template<typename T >
-// bool Deque<T>::get_head(T &element) const {
-//     if (empty()) {
-//         throw new std::logic_error("size error");
-//     }
-//     element = head_point->next->data;
-//     return true;
-// }
-
-// template<typename T>
-// QNode<T> *Deque<T>::begin() {
-//     if (empty()) {
-//         throw new std::logic_error("size error");
-//     }
-//     return head_point->next;
-// }
+}
 
 }
 
