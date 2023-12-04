@@ -80,3 +80,4 @@ build/
 cmake-build-debug/
 out/
 .vscode/settings.json
+src/main.exe

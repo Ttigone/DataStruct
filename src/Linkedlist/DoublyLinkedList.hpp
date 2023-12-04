@@ -7,487 +7,289 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-template<class ElemType> 
-class DLLNode {
-    friend class DoublyLinkedList;
-public:
-    DLLNode() : prev(nullptr), next(nullptr) { }
-    DLLNode(const ElemType &element, DLLNode *n = nullptr, DLLNode *p = nullptr) :
-        info(element), prev(n), next(p) { }
-public: 
-    ElemType info;
-    DLLNode *prev, *next;
-};
 
+/**
+ * @date 2023-06-15
+ * 
+ * @author C3H3_Ttigone
+ * @Contact caicaishaoshan@gmail.com
+ * 
+ * @brief 双向循环链表
+ */
 
-namespace mydoublylist {         // 双向循环链表
+namespace mydoublylist {         
+template<typename T>
+class DoublyLinkedList;
 
-namespace haveTail {
-template<class ElemType>
+template<typename T>
+struct DLLItem;
+
+template<typename T>
+void erase_for_Joseph(DoublyLinkedList<T>& list, int pos);
+
+template<typename T>
+void Joseph_Problem(DoublyLinkedList<T>& list, int N, int k, int m);
+}
+
+namespace mydoublylist {         
+    
+template<typename T>
 class DoublyLinkedList {
+public:
+    friend void erase_for_Joseph<>(DoublyLinkedList<T>& list, int pos);
+    friend void Joseph_Problem<>(DoublyLinkedList<T>& list, int N, int k, int m);
+
+public:
+    DoublyLinkedList(void);
+    DoublyLinkedList(const DoublyLinkedList& rhs);
+    ~DoublyLinkedList(void);
+
+private:
+    struct DLLItem {
+    public:
+        DLLItem(void);
+        DLLItem(const T& val, DLLItem* p = nullptr, DLLItem* n = nullptr);
+    public:
+        int getNumber(void) const noexcept { return number; };
+        DLLItem& operator=(const DLLItem& rhs) = delete;
+    public:
+        T data;
+        size_t freq = 0;
+        size_t number = 0;
+        DLLItem *prev = nullptr, *next = nullptr;
+    };
+
 private:
     size_t m_length;
-    DLLNode<ElemType> *head;
-    DLLNode<ElemType> *tail;
-    
+    DLLItem head;
+
 public:
-/*
-funtion: 默认构造函数
-*/
-    DoublyLinkedList() : m_length(0), head(new DLLNode<ElemType>), tail(head) {
-        head->next = head->prev = head;
-    }
+    inline T& getElem(int pos);
+    inline const T& getElem(int pos) const ;
 
-/*
-funtion: 拷贝构造函数  初始化列表使用委托构造
-*/
-    DoublyLinkedList(const DoublyLinkedList<ElemType> &copy) :  DoublyLinkedList() {  // const 成员只能调用 const 成员函数
-        head->next = head->prev = head;
-        for (int i = 1; i <= copy.size(); ++i) {
-            insert(i, copy.get_elem(i));
-        }
-    }
+public:
+    void clear(void);
+    size_t size(void) const noexcept { return m_length; }
+    bool empty(void) const noexcept { return m_length == 0; }
 
-/*
-funtion: 析构函数
-*/
-    ~DoublyLinkedList() {
-        clear();
-        delete head;
-        head = tail = nullptr;
-    }
-/*
-funtion: 返回长度
-parameter: none
-return: 长度值
-*/
-    constexpr size_t size() const {
-        return m_length;
-    }
-
-/*
-funtion: 判断双向链表是否为空
-parameter: none
-return: true is empty, false is no emplty
-*/
-    constexpr bool empty() const {
-        return m_length == 0;
-    }
-
-/*
-funtion: 清除元素
-parameter: none
-return: none
-*/
-    void clear() {
-        while(!empty()) {
-            // way1 
-            DLLNode<ElemType> *deletePoint = head->next;
-            head->next = deletePoint->next;
-            deletePoint->next->prev = head;
-            --m_length;
-            delete deletePoint;
-            deletePoint = nullptr;
-            // way2
-            // delete_element(1);
-        }
-        tail = head;
-    }
-
-/*
-funtion: 获取特定位置元素的指针
-parameter: position-位置 从 0 开始
-return: 指向该元素的指针-引用
-*/
-    DLLNode<ElemType> *getElemPoint(const int position) const {
-        if (position < 0 || position > size()) {
-            return nullptr;
-        }
-        auto traversePoint = head;         
-        for (int i = 0; i < position; ++i) {
-            traversePoint = traversePoint->next;
-        }
-        return traversePoint;
-    }
-
-/*
-funtion: 获取特定位置元素
-parameter: position-位置 从 1 开始
-return: 元素
-*/
-    ElemType getElem(const int position) const {
-        return getElemPoint(position)->info;
-    }
-/*
-funtion: 插入元素
-parameter: position-位置, element-元素
-return: none
-*/
-    bool insert(const int &position, const ElemType &element) {
-        if(position < 1 || position > size() + 1) {
-            return false;
-        }
-        DLLNode<ElemType> *traversePoint = getElemPoint(position - 1);  // 新节点的前一个节点
-        if (!traversePoint) {
-            return false;
-        }
-        DLLNode<ElemType> *newPoint = new DLLNode<ElemType>;
-        newPoint->info = element;
-        newPoint->prev = traversePoint;              // 新节点指向前驱节点
-        newPoint->next = traversePoint->next;        // 新节点指向后一节点
-        traversePoint->next->prev = newPoint;        // 新节点的后一节点指向新节点
-        traversePoint->next = newPoint;              // 新节点的前一个节点指向新节点
-        ++m_length;
-        if (m_length == position) { // 插入的位置是最后一个位置 需要更新 tail 
-            tail =  newPoint;
-        } 
-        return true;
-    }
-
-/*
-funtion: 删除元素
-parameter: position-位置 element-保存删除元素
-return: true is successful
-*/
-    bool deleteElement(const int &position, ElemType &element) {
-        if (position < 1 || position > size()) {
-            return false;
-        }
-        DLLNode<ElemType> *deletePoint = getElemPoint(position);  // 获取删除位置的指针
-        element = deletePoint->info;
-        if (!deletePoint) {
-            return false;
-        }
-        deletePoint->prev->next = deletePoint->next;  // 删除节点的前一个节点指向删除节点的后一个节点
-        deletePoint->next->prev = deletePoint->prev;  // 删除节点的后一个节点指向删除节点的前一个节点
-        --m_length;
-        delete deletePoint;
-        deletePoint = nullptr;
-        if (empty()) {
-            tail = head;
-        }
-    }
-
-/*
-funtion: 删除元素
-parameter: position-位置 
-return: 被删除元素的副本
-*/
-    ElemType deleteElement(const int &position) {
-        if (position < 1 || position > size()) {
-            return false;
-        }
-        DLLNode<ElemType> *deletePoint = getElemPoint(position);  // 获取删除位置的指针
-        if (!deletePoint) {
-            return false;
-        }
-        ElemType keep_ = deletePoint->info;
-        deletePoint->prev->next = deletePoint->next;  // 删除节点的前一个节点指向删除节点的后一个节点
-        deletePoint->next->prev = deletePoint->prev;  // 删除节点的后一个节点指向删除节点的前一个节点
-        --m_length;
-        delete deletePoint;
-        deletePoint = nullptr;
-        return keep_;
-        if (empty()) {
-            tail = head;
-        }
-    }
-
-/*
-funtion: 遍历链表
-parameter: none
-return: none
-*/
-    bool traverse() {
-        if (empty()) {
-            return false;
-        } else {
-            DLLNode<ElemType> *traverse_point = head->next;
-            while(traverse_point != head) {
-                cout << traverse_point->info << " ";
-                traverse_point = traverse_point->next;
-            }
-            return true;
-        }
-    }
-
-/*
-funtion: 在链表头部添加元素
-parameter: 元素
-return: true is successful
-*/
-    bool addToHead(const ElemType &element) {
-        // way1
-        DLLNode<ElemType> *newPoint = new (DLLNode<ElemType>);
-        newPoint->info = element;
-        newPoint->next = head->next;   // 新节点链接下一节点
-        head->next->prev = newPoint;   // 后继链接新节点
-        newPoint->prev = head;         // 新节点指向头结点 
-        head->next = newPoint;         // 头结点下一结点为新节点
-        ++m_length;
-        return true;
-        // way2
-        // return insert(1, element);
-    }
-
-/*
-funtion: 在链表末尾添加元素
-parameter: 元素
-return: true is successful
-*/
-    bool addToTail(const ElemType &element) {
-        // way1
-        DLLNode<ElemType> *newPoint = new (DLLNode<ElemType>);
-        // new_point->info = element;
-        // new_point->prev = head->prev;   // 新节点指向原最后一个元素
-        // head->prev->next = new_point;   // 原最后一个元素指向新最后一个元素
-        // new_point->next = head;       // 最后一个元素的 next 指向头结点
-        // head->prev = new_point;       // 头结点的 prev 指向最后一个元素
-        // ++m_length;
-        // return true; 
-        newPoint->info = element;
-        newPoint->next = tail->next; // 链接后一个节点
-        newPoint->prev = tail;       // 链接前一个节点
-        tail->next = newPoint;       // 链接新节点
-        tail = newPoint;             // tail 指向最后一个节点
-        ++m_length;
-        return true;
-        //way2       
-        // return insert(size() + 1, element);
-
-    }
-
+    void insert(const int &pos, const T &val, int index = 0);
+    void erase(int first, int last);
+    void erase(int pos);
+    void traverse(void);
+    void push_front(const T& val);
+    void push_back(const T& val, int index = 0);
+    void locateNode(const T& val, int times = 1);
+    void sort(void);
 };
 
+template<typename T>
+DoublyLinkedList<T>::DLLItem::DLLItem(void) : prev(nullptr), next(nullptr) {
+    data = T();
+}
+
+template<typename T>
+DoublyLinkedList<T>::DLLItem::DLLItem(const T& val, DLLItem* p, DLLItem* n) : data(val), prev(p), next(n) { }
+
+
+template<typename T>
+DoublyLinkedList<T>::DoublyLinkedList() : m_length(0), head(DLLItem(0)) {
+    head.next = head.prev = &head;
+}
+
+template<typename T>
+DoublyLinkedList<T>::DoublyLinkedList(const DoublyLinkedList<T>& rhs) :  DoublyLinkedList() {  // const 成员只能调用 const 成员函数
+    head.next = head.prev = &head;
+    for (int i = 1; i <= rhs.size(); ++i) {
+        insert(i, rhs.getElem(i));
+    }
+}
+
+template<typename T>
+DoublyLinkedList<T>::~DoublyLinkedList() {
+    clear();
+}
+
+template<typename T>
+T& DoublyLinkedList<T>::getElem(int pos) {
+    auto traversePoint = head.next;
+    while (traversePoint != &head && --pos) {
+        traversePoint = traversePoint->next;
+    }
+    return traversePoint->data;
+}
+
+template<typename T>
+const T& DoublyLinkedList<T>::getElem(int pos) const {
+    auto traversePoint = head.next;
+    while (traversePoint != &head && --pos) {
+        traversePoint = traversePoint->next;
+    }
+    return traversePoint->data;
+}
+
+template<typename T>
+void DoublyLinkedList<T>::clear() {
+    erase(1, size() + 1);
+}
+
+template<typename T>
+void DoublyLinkedList<T>::insert(const int& pos, const T& val, int index) {
+    if(pos < 1 || pos > size() + 1) {
+        return;
+    }
+    auto traversePoint = &head;
+    for (int i = 1; i < pos; ++i) {
+        traversePoint = traversePoint->next;
+    }
+    if (!traversePoint) {
+        return;
+    }
+    DLLItem *newPoint = new DLLItem(val, traversePoint, traversePoint->next);
+    newPoint->number = index;
+    traversePoint->next->prev = newPoint;        // 新节点的后一节点指向新节点
+    traversePoint->next = newPoint;              // 新节点的前一个节点指向新节点
+    ++m_length;
+}
+
+template<typename T>
+void DoublyLinkedList<T>::erase(int first, int last) { // 左闭右开
+    for (int i = 0; i < last - first; ++i) {
+        erase(first + i);
+    }
+}
+template<typename T>
+void DoublyLinkedList<T>::erase(int pos) {
+    if (pos < 1 || pos > size()) {
+        return;
+    }
+    auto traversePoint = &head;
+    for (int i = 0; i < pos; ++i) {
+        traversePoint = traversePoint->next;
+    }
+    if (!traversePoint) {
+        return;
+    }
+    traversePoint->prev->next = traversePoint->next;  // 删除节点的前一个节点指向删除节点的后一个节点
+    if (!traversePoint->next) {
+        return;
+    }
+    traversePoint->next->prev = traversePoint->prev;
+    --m_length;
+    delete traversePoint;
+    traversePoint = nullptr;
+}
+
+template<typename T>
+void DoublyLinkedList<T>::traverse(void) {
+    if (empty()) {
+        return;
+    }
+    auto traversePoint = head.next;
+    // while(traversePoint != &head) {
+    while(traversePoint != &head) {
+        if (traversePoint == nullptr) {
+            return;
+        }
+        cout << traversePoint->data << " ";
+        traversePoint = traversePoint->next;
+    }
+}
+
+template<typename T>
+void DoublyLinkedList<T>::push_front(const T& val) {
+    insert(1, val);
+}
+
+template<typename T>
+void DoublyLinkedList<T>::push_back(const T& val, int index) {
+    insert(size() + 1, val, index);
 }
 
 
-namespace noTail {
-
-template<class ElemType>
-class DoublyLinkedList {
-private:
-    size_t m_length;
-    DLLNode<ElemType> *head;
-    
-public:
-/*
-funtion: 默认构造函数
-*/
-    DoublyLinkedList() : m_length(0), head(new DLLNode<ElemType>) {
-        head->next = head->prev = head;
-    }
-
-/*
-funtion: 拷贝构造函数  初始化列表使用委托构造
-*/
-    DoublyLinkedList(const DoublyLinkedList<ElemType> &copy) :  DoublyLinkedList() {  // const 成员只能调用 const 成员函数
-        head->next = head->prev = head;
-        for (int i = 1; i <= copy.size(); ++i) {
-            insert(i, copy.get_elem(i));
+template<typename T>
+void DoublyLinkedList<T>::locateNode(const T& val, int times) {
+    auto traversePoint = head.next;
+    while (traversePoint != &head) {
+        if (traversePoint->data == val) {
+            (traversePoint->freq) += times;
         }
+        traversePoint = traversePoint->next;
     }
+    this->sort();
+}
 
-/*
-funtion: 析构函数
-*/
-    ~DoublyLinkedList() {
-        clear();
-        delete head;
-        head = nullptr;
-    }
-/*
-funtion: 返回长度
-parameter: none
-return: 长度值
-*/
-    constexpr size_t size() const {
-        return m_length;
-    }
 
-/*
-funtion: 判断双向链表是否为空
-parameter: none
-return: true is empty, false is no emplty
-*/
-    constexpr bool empty() const {
-        return m_length == 0;
-    }
-
-/*
-funtion: 清除元素
-parameter: none
-return: none
-*/
-    void clear() {
-        while(!empty()) {
-            // way1 
-            DLLNode<ElemType> *delete_point = head->next;
-            head->next = delete_point->next;
-            delete_point->next->prev = head;
-            --m_length;
-            delete delete_point;
-            delete_point = nullptr;
-            // way2
-            // delete_element(1);
+template<typename T>
+void DoublyLinkedList<T>::sort(void) {   // 根据 freq 排序
+    auto listHeader = &head;
+    auto pt = listHeader->next->next;   // 指向首元结点下一结点的指针
+    auto pt2 = pt;
+    pt2 = nullptr;
+    auto pre = listHeader;
+    pre = nullptr;
+    listHeader->next->next = &head;   // 当前链表只有一个首元结点，其指针域为循环的 &head
+    while (pt != &head) {        // 只有一个数据时，不参加排序
+        pt2 = pt->next;
+        pre = listHeader;        // 每次获取弄好的新链表头结点
+        while (pre->next != &head && pre->next->freq >= pt->freq) {
+            pre = pre->next;
         }
+        pt->next = pre->next;
+        if (pre->next != &head) {
+            pre->next->prev = pt;           // 前指针域连接
+        }       
+        pre->next = pt;
+        pt->prev = pre;
+        pt = pt2;
     }
-
-/*
-funtion: 获取特定位置元素的指针
-parameter: position-位置 从 0 开始
-return: 指向该元素的指针-引用
-*/
-    DLLNode<ElemType> *get_elem_point(const int position) const {
-        if (position < 0 || position > size()) {
-            return nullptr;
-        }
-        auto traverse_point = head;         
-        for (int i = 0; i < position; ++i) {
-            traverse_point = traverse_point->next;
-        }
-        return traverse_point;
+    if (listHeader->next == listHeader->prev) {
+        cout << "Y";
     }
+    int t;
+} // template class DoublyLinkedList<T> OK
 
-/*
-funtion: 获取特定位置元素
-parameter: position-位置 从 1 开始
-return: 元素
-*/
-    ElemType get_elem(const int position) const {
-        return get_elem_point(position)->info;
+
+template<typename T>
+void erase_for_Joseph(DoublyLinkedList<T>& list, int pos) {
+    if (pos < 1 || pos > list.size()) {
+        return;
     }
-/*
-funtion: 插入元素
-parameter: position-位置, element-元素
-return: none
-*/
-    bool insert(const int &position, const ElemType &element) {
-        if(position < 1 || position > size() + 1) {
-            return false;
-        }
-        DLLNode<ElemType> *traverse_point = get_elem_point(position - 1);  // 新节点的前一个节点
-        if (!traverse_point) {
-            return false;
-        }
-        DLLNode<ElemType> *new_point = new DLLNode<ElemType>;
-        new_point->info = element;
-        new_point->prev = traverse_point;              // 新节点指向前驱节点
-        new_point->next = traverse_point->next;        // 新节点指向后一节点
-        traverse_point->next->prev = new_point;        // 新节点的后一节点指向新节点
-        traverse_point->next = new_point;              // 新节点的前一个节点指向新节点
-        ++m_length;
-        return true;
+    auto traversePoint = &list.head;
+    for (int i = 0; i < pos; ++i) {
+        traversePoint = traversePoint->next;
     }
-
-/*
-funtion: 删除元素
-parameter: position-位置 element-保存删除元素
-return: true is successful
-*/
-    bool delete_element(const int &position, ElemType &element) {
-        if (position < 1 || position > size()) {
-            return false;
-        }
-        DLLNode<ElemType> *delete_point = get_elem_point(position);  // 获取删除位置的指针
-        element = delete_point->info;
-        if (!delete_point) {
-            return false;
-        }
-        delete_point->prev->next = delete_point->next;  // 删除节点的前一个节点指向删除节点的后一个节点
-        delete_point->next->prev = delete_point->prev;  // 删除节点的后一个节点指向删除节点的前一个节点
-        --m_length;
-        delete delete_point;
-        delete_point = nullptr;
+    if (!traversePoint) {
+        return;
     }
+    traversePoint->prev->next = traversePoint->next;  // 删除节点的前一个节点指向删除节点的后一个节点
+    if (!traversePoint->next) {
+        return;
+    }
+    traversePoint->next->prev = traversePoint->prev;
+    cout << traversePoint->number << " ";
+    --list.m_length;
+    delete traversePoint;
+    traversePoint = nullptr;
+}
 
-/*
-funtion: 删除元素
-parameter: position-位置 
-return: 被删除元素的副本
-*/
-    ElemType delete_element(const int &position) {
-        if (position < 1 || position > size()) {
-            return false;
+template<typename T>
+void Joseph_Problem(DoublyLinkedList<T>& list, int N, int k, int m) {
+    while (!list.empty()) {
+        int currentSize = list.size();
+        int eraseNum = (k - 1 + m) % currentSize--;  // 当删除到最后一个数字时，任何数对 1 取余均为 0
+        if (currentSize == 0) {
+            mydoublylist::erase_for_Joseph(list, 1);
+            return;
         }
-        DLLNode<ElemType> *delete_point = get_elem_point(position);  // 获取删除位置的指针
-        if (!delete_point) {
-            return false;
+        if (eraseNum == 0) {
+            mydoublylist::erase_for_Joseph(list, currentSize + 1);
+            continue;
         }
-        ElemType keep_ = delete_point->info;
-        delete_point->prev->next = delete_point->next;  // 删除节点的前一个节点指向删除节点的后一个节点
-        delete_point->next->prev = delete_point->prev;  // 删除节点的后一个节点指向删除节点的前一个节点
-        --m_length;
-        delete delete_point;
-        delete_point = nullptr;
-        return keep_;
-
+        mydoublylist::erase_for_Joseph(list, eraseNum);
+        k = eraseNum;
     }
-
-/*
-funtion: 遍历链表
-parameter: none
-return: none
-*/
-    bool traverse() {
-        if (empty()) {
-            return false;
-        } else {
-            DLLNode<ElemType> *traverse_point = head->next;
-            while(traverse_point != head) {
-                cout << traverse_point->info << " ";
-                traverse_point = traverse_point->next;
-            }
-            return true;
-        }
-    }
-
-/*
-funtion: 在链表头部添加元素
-parameter: 元素
-return: true is successful
-*/
-    bool add_to_head(const ElemType &element) {
-        // way1
-        DLLNode<ElemType> *new_point = new (DLLNode<ElemType>);
-        new_point->info = element;
-        new_point->next = head->next;   // 新节点链接下一节点
-        head->next->prev = new_point;   // 后继链接新节点
-        new_point->prev = head;         // 新节点指向头结点 
-        head->next = new_point;         // 头结点下一结点为新节点
-        ++m_length;
-        return true;
-        // way2
-        // return insert(1, element);
-    }
-
-/*
-funtion: 在链表末尾添加元素
-parameter: 元素
-return: true is successful
-*/
-    bool add_to_tail(const ElemType &element) {
-        // way1
-        DLLNode<ElemType> *new_point = new (DLLNode<ElemType>);
-        new_point->info = element;
-        new_point->prev = head->prev;   // 新节点指向原最后一个元素
-        head->prev->next = new_point;   // 原最后一个元素指向新最后一个元素
-        new_point->next = head;       // 最后一个元素的 next 指向头结点
-        head->prev = new_point;       // 头结点的 prev 指向最后一个元素
-        ++m_length;
-        return true; 
-        //way2       
-        // return insert(size() + 1, element);
-
-    }
-
-};
-
-
-
 }
 
 }
 
-// template class DoublyLinkedList<ElemType> OK
 #endif

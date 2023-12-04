@@ -75,8 +75,16 @@
         "format": "cpp",
         "span": "cpp",
         "*.inc": "cpp",
-        "charconv": "cpp"
+        "charconv": "cpp",
+        "mutex": "cpp",
+        "variant": "cpp",
+        "stacktrace": "cpp",
+        "unordered_set": "cpp",
+        "regex": "cpp",
+        "bitset": "cpp",
+        "complex": "cpp"
     },
     "editor.suggest.snippetsPreventQuickSuggestions": false,
     "aiXcoder.showTrayIcon": true,
+    "editor.fontFamily": "Consolas, 'Courier New', monospace"
 }

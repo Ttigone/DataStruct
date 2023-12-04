@@ -3,17 +3,20 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using std::cin;
 using std::cout;
 using std::endl;
-
+using std::vector;
 
 /**
- * @brief 顺序栈
+ * @date 2023-09-06
  * 
  * @author C3H3_Ttigone
- * @date 2023-09-06
+ * @Contact caicaishaoshan@gmail.com
+ * 
+ * @brief 顺序栈
  */
 namespace mySeqStack { 
 
@@ -168,8 +171,31 @@ void Stack<T>::traverse() const {
  * 
  * @brief 链栈
  */
-namespace myListStack {
 
+namespace myListStack {
+template<typename T>
+class Stack;
+
+template<typename T>
+class StackItem;
+
+template<typename T>
+void viewQueenMap(const vector<vector<T>>& queenMap);
+
+template<typename T>
+bool isSafe(const vector<vector<T>>& queenMap, int row, int col);
+
+template<typename T>
+void Queen_Problem_With_Stack(int queens);
+
+template<typename T>
+void Queen_Problem_With_Recursion(vector<vector<T>>& queenMap, int queens, int row = 0);
+
+template<typename T>
+void showQueen(void); 
+}
+
+namespace myListStack {
 template<typename T>
 class Stack {
 public:
@@ -307,6 +333,160 @@ T Stack<T>::get(int i) const {
         recordNode = recordNode->next;
     }
     return recordNode->data;
+}
+
+template<typename T>
+void Queen_Problem_With_Staclk(int queens) {
+    vector<vector<T>> queenMap;
+    queenMap.insert(queenMap.begin(), queens, vector<T>(queens, 0));
+    Stack<T> queenStack;                    
+    int row = 0;                // 行遍历
+    int col = 0;         // 每一行从第一列开始遍历
+    while (row < queens) {
+        bool placed = false;
+        while (col < queens) {   // 2  0
+            if (isSafe(queenMap, row, col)) {       // 判断 第 row + 1 行， col + 1 列是否可以皇后
+                queenMap[row].at(col) = 1;       // 没有则在 该 row  + 1 行，col + 1 列放置皇后
+                queenStack.push(col);               // 将列号入栈
+                placed = true;                      // 放置成功
+                break;                              // 退出循环
+            }
+            col++;
+        }
+        if (placed) {       // 如果放置成功，开始放置下一行的皇后
+            row++;  
+            col = 0;        
+        } else {            // 没有放置成功
+            if (queenStack.empty()) {         
+                cout << "no";
+                return;
+            }
+            int lastCol = queenStack.top();     // 获取最后的列号
+            queenStack.pop();                   // 回退列号
+            queenMap[--row].at(lastCol) = 0;   // 赋值为空
+            if (lastCol == queens - 1) {
+                col = queenStack.top() + 1;
+                --row;
+                queenMap[row].at(queenStack.top()) = 0;
+                queenStack.pop();
+            } else {
+                col = lastCol + 1;
+            }
+        }
+    }
+    viewQueenMap(queenMap);
+}
+
+
+vector<vector<vector<int>>> result;
+template<typename T>
+void Queen_Problem_With_Recursion(vector<vector<T>>& queenMap, int queens, int row) {
+    int trow = row;
+    int tcol = 0;
+    if (trow == queens) {
+        result.push_back(queenMap);
+        return;
+    }
+   while (tcol < queens) {
+       if (isSafe(queenMap, trow, tcol)) {
+           queenMap[trow].at(tcol) = 1;
+           Queen_Problem_With_Recursion(queenMap, queens, trow + 1);
+           queenMap[trow].at(tcol) = 0;
+       }
+       ++tcol;
+   }
+}
+
+template<typename T>
+void showQueen(void) {
+    int num = 0;
+    for (auto vec : result) {
+        cout << "Group: " << ++num;
+        for (int i = 0; i < vec.size(); ++i) {
+            auto dis = find(vec[i].begin(), vec[i].end(), 1) - vec[i].begin();
+            cout << '(' << i << ',' << dis << ')';
+        }
+        cout << endl;
+    }
+}
+
+
+template<typename T>
+void viewQueenMap(const vector<vector<T>>& queenMap) {
+    for (auto i : queenMap) {
+        for (auto j : i) {
+            cout << j << " "; 
+        }
+        cout << endl;
+    }
+}
+
+template<typename T>
+bool isSafe(const vector<vector<T>>& queenMap, int row, int col) {
+    for (int i = 0; i < queenMap.size(); ++i) {          // 判断当前列
+        if (i == row) {        // 跳过
+            continue;
+        }
+        if (queenMap[i].at(col) == 1) {
+            return false;
+        }
+    }  
+    for (int i = 0; i < queenMap.size(); ++i) {          // 判断当前行
+        if (i == col) {
+            continue;
+        }
+        if (queenMap[row].at(i) == 1) {
+            return false;
+        }
+    }
+
+    int n = 4;
+    for (int t = 0, i, j; t < n; ++t) {
+        switch (t) {
+            case 0: {
+                i = row, j = col;
+                while (i >= 0 && j >= 0) {        // i = 0 说明在右上半区 j = 0 说明在左下半区
+                    if (queenMap[i].at(j) == 1) {
+                        return false;
+                    }
+                    --i, --j;     // 左上
+                }
+                break;
+            }
+            case 1: {
+                i = row, j = col;
+                while (i != queenMap.size() - 1 && j != queenMap.size() - 1) {
+                    if (queenMap[i].at(j) == 1) {
+                        return false;
+                    }
+                    ++i, ++j;           // 右下
+                }
+                break;
+            }
+            case 2: {
+                i = row, j = col;             // 0, 0
+                while (i >= 0 && j <= queenMap.size() -1) {
+                    if (queenMap[i].at(j) == 1) {
+                        return false;
+                    }
+                    --i, ++j;   // 右上
+                }
+                break;
+            }
+            case 3: {
+                i = row, j = col;
+                while (i <= queenMap.size() -1 && j >= 0) {
+                    if (queenMap[i].at(j) == 1) {
+                        return false;
+                    }
+                    ++i, --j;   // 左下
+                }
+                break; 
+            }
+        }
+    }
+
+    return true;
 }
 
 } // template class Stack<T> OK

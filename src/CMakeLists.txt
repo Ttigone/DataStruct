@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24 FATAL_ERROR)  
+cmake_minimum_required(VERSION 3.11 FATAL_ERROR)  
 
 # 生成可执行文件
 add_executable(main main.cpp)
@@ -36,3 +36,9 @@ add_subdirectory(Tree)
 target_link_libraries(main PUBLIC Tree_header)
 # install(FILES Binary_Tree.hpp DESTINATION Tree/)
 # target_include_directories(main INTERFACE "$<TARGET_PROPERTY:Tree_header,INTERFACE_INCLUDE_DIRECTORIES>") 
+
+add_subdirectory(Algorithm)
+target_link_libraries(main PUBLIC Algorithm_header)
+
+add_subdirectory(Array)
+target_link_libraries(main PUBLIC Array_header)
