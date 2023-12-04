@@ -178,6 +178,7 @@ void LinkList<T>::push_front(const T& val) {
 
 template<typename T>
 void LinkList<T>::push_back(const T& val) {
+<<<<<<< HEAD
 //    if (tail.next != nullptr) {
 //        auto newPoint = new ListItem(val, (tail.next)->next);
 //        (tail.next)->next = newPoint;
@@ -189,6 +190,12 @@ void LinkList<T>::push_back(const T& val) {
 //        ++m_length;
 //    }
     insert(1, val);
+=======
+    auto newPoint = new ListItem(val, (tail.next)->next);
+    (tail.next)->next = newPoint;
+    tail.next = newPoint;
+    ++m_length;
+>>>>>>> e1d9864b8c472d7ca88b96a6525eed539c1d6fea
 }
 
 template<typename T>
@@ -269,7 +276,10 @@ const T& LinkList<T>::getElem(int pos) const {
     }
     return traversePoint->data;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1d9864b8c472d7ca88b96a6525eed539c1d6fea
 
 /**
  * function: 合并链表

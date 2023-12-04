@@ -1,15 +1,41 @@
+#include <iostream>
+#include <cmath>
+#include <set>
+#include <string>
+#include <list>
+#include <forward_list>
+#include <vector>
+#include <array>
+#include <algorithm>
+#include <algorithm>
+#include <chrono>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <time.h>
+#include <locale>
+#include <functional>
+#include <unordered_map>
+#include <memory>
+#include <numeric>
+#include <utility>
+
+#include <stdio.h>
+
+using namespace std;
+
+
+#include "Seqlist/SeqList.hpp"
+#include "Linkedlist/DoublyLinkedList.hpp"
 #include "Linkedlist/LinkedList.hpp"
 #include "Stack/Stack.hpp"
 #include "Deque/Deque.hpp"
 #include "String/String.hpp"
-#include "String/kmp.hpp"
-#include "Algorithm/bag.hpp"
-//#include "Stack/Hanoi.hpp"
-// #include "Tree/Binary_Tree.hpp"
-//#include <bits/stdc++.h>
-#include <chrono>
+#include "Stack/Hanoi.hpp"
+#include "Tree/Binary_Tree.hpp"
 
-using namespace std;
+
 
 int main()
 {
@@ -20,16 +46,6 @@ int main()
     auto start_time = std::chrono::high_resolution_clock::now();
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
-
-#endif
-
-// #define test
-
-
-#ifdef test
-for (int i = 0; i < 1000; i++) {
-
-#endif
 
 //     for (int i = 0; i < 1; ++i) {
         // mybinarytree::Tree<char> tree("A(B(D(,G)),C(E,F))");
@@ -51,7 +67,6 @@ for (int i = 0; i < 1000; i++) {
 //         cout << endl;
 //     }
 
-    cout << "ÄãºÃ";
 
 #ifdef test
 }

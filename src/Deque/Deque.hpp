@@ -36,9 +36,6 @@ void viewPath(const Deque<T>& deque);
 
 namespace myqueue {
 
-
-
-
 template<typename T>
 class Deque {
 public:
@@ -49,7 +46,7 @@ public:
 public:
     inline bool empty(void) const noexcept { return m_length == 0; };
     inline size_t size(void) const noexcept { return m_length; };
-    inline static int& getPos(void) noexcept { return pos; };    // 获取下标
+    // inline DequeItem * begin();
 
 public:
     void clear(void);
@@ -68,6 +65,9 @@ public:
 
 private:
     T& at(int pos) const;    // 下标
+
+private:
+    const T& at(int pos) const;    // 下标
 
 private: 
     struct DequeItem {        // 内部节点类型
@@ -155,28 +155,27 @@ void Deque<T>::pop_back(void) {
 
 template<typename T>
 void Deque<T>::pop_front(void) {
-    DequeItem *deletePoint = (&head)->next;
-    if (deletePoint == nullptr) {
-        tail.next = nullptr;
-        return;
-    } 
-    head->next = deletePoint->next;             
-    delete deletePoint;
-    deletePoint = nullptr;
-    --m_length;
-    // erase(1);
+
 }
 
 
 template<typename T>
 void Deque<T>::push_back(const T& val) {
-    if (tail.next == nullptr) {             // 第一个位置
-        insert(1, val);
-        return;
-    }
-    DequeItem *newPoint = new DequeItem(val, (tail.next)->next);
-    (tail.next)->next = newPoint;
-    tail.next = newPoint;
+    // QNode<T> *new_point = new QNode<T>;
+    // new_point->data = element;   // 存储数据域
+    // new_point->next = tail_point->next;   // nullptr 的传递
+    // tail_point->next = new_point;  // 链接新节点
+    // tail_point = new_point;   // 尾指针指向最后一个元素
+    // ++m_length;   // 长度 + 1
+    // return true;
+    // DequeItem *newPoint = new DequeItem(val, tail.next);
+    // tail.next = newPoint;
+    DequeItem *traversePoint = &head;
+    
+    DequeItem *newPoint = new DequeItem(val, traversePoint->next);
+    // DequeItem *newPoint = new DequeItem(val, head.next);
+    // head.next = newPoint;
+    traversePoint->next = newPoint;
     ++m_length;
 }
 
@@ -235,101 +234,24 @@ void Deque<T>::traverse(void) const {
 
 
 
-template<typename T>
-T Deque<T>::getNext(int pos) {        // 并未真正出队列
-    DequeItem *traversePoint = head.next;
-    while (pos--) {
-        traversePoint = traversePoint->next;
-    }
-    return traversePoint->data;
-}
+// template<typename T >
+// bool Deque<T>::get_head(T &element) const {
+//     if (empty()) {
+//         throw new std::logic_error("size error");
+//     }
+//     element = head_point->next->data;
+//     return true;
+// }
 
-template<typename T>
-T& Deque<T>::getItem(int pos) const {    // 根据下标获取对应的 Item
-    return at(pos);
-}
-
-
-template<typename T>
-void Deque<T>::traverse_for_Maze(void) const {
-    if (empty()) {
-        return;
-    }
-    DequeItem *traversePoint = new DequeItem();
-    traversePoint->next = head.next;
-    traversePoint = traversePoint->next;
-    int i = 0;
-    while (traversePoint != nullptr) {
-        cout << traversePoint->data;
-        ++i;
-        if (traversePoint->next != nullptr) {
-            cout << " ";
-        }
-        if (i == 5) {
-            cout << endl;
-            i = 0;
-        }
-        traversePoint = traversePoint->next;
-    }
-}
-
-template<typename T>
-T& Deque<T>::at(int pos) const {   // 下标
-    auto traversePoint = head.next;
-    while (pos--) {
-        traversePoint = traversePoint->next;
-    }
-    return traversePoint->data;
-
-} // template class Deque<T> OK
-
-
-template<typename T>
-void Maze_algorithm(Deque<T>& deque, 
-                    std::vector<std::vector<int>>& map, 
-                    int x1, int y1, int x2, int y2) 
-{
-    if (map[x1].at(y1) == 1 || map[x2].at(y2) == 1) {
-        cout << "Start Point or End Point is wall";
-        return;
-    }
-    T item(x1, y1, -1);
-    deque.push_back(item);
-    int recordPos = 0;
-    map[x1].at(y1) = -1;  // 移除遍历
-    while (!deque.empty()) {    // 队列非空
-        item = deque.getNext(Deque<T>::getPos());
-        if (item.i == x2 && item.j == y2) {
-            viewPath(deque);
-            return;
-        }
-        for (int t = 0, tx, ty; t < 4; ++t) {
-            switch (t) {
-                case 0: tx = item.i - 1, ty = item.j; break;       // up
-                case 1: tx = item.i, ty = item.j + 1; break;       // right
-                case 2: tx = item.i + 1, ty = item.j; break;       // down
-                case 3: tx = item.i, ty = item.j - 1; break;       // left
-            }
-            if (map[tx].at(ty) == 0) {                           // 可以走
-                deque.push_back(T(tx, ty, Deque<T>::getPos()));
-                map[tx].at(ty) = -1;
-            }
-        }
-        ++Deque<T>::getPos();
-    }
-    deque.~Deque();
-    return;
-}
-
-template<typename T>
-void viewPath(const Deque<T>& deque) {
-    Deque<T> path;
-    for (int i = deque.getPos(); i != -1; i = (deque.getItem(i)).pre) {
-        path.push_front(deque.getItem(i));
-    }    
-    path.traverse_for_Maze();
-}
+// template<typename T>
+// QNode<T> *Deque<T>::begin() {
+//     if (empty()) {
+//         throw new std::logic_error("size error");
+//     }
+//     return head_point->next;
+// }
 
 }
 
+// template class Deque<T> OK
 #endif
