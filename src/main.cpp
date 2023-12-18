@@ -34,41 +34,33 @@ using namespace std;
 #include "String/String.hpp"
 #include "Stack/Hanoi.hpp"
 #include "Tree/Binary_Tree.hpp"
+#include "array/Array.hpp"
+#include "Graph/Graph.hpp"
+
 
 
 
 int main()
 {
+// #define time
 
 #ifdef time
-
     cout << __TIME__ << endl;
     auto start_time = std::chrono::high_resolution_clock::now();
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
+#endif
 
-//     for (int i = 0; i < 1; ++i) {
-        // mybinarytree::Tree<char> tree("A(B(D(,G)),C(E,F))");
-        // tree.viewTree();
-//         tree.viewTree(tree.getRoot());
-//         cout << endl;
-//         // cout << tree.treeHeight(tree.getRoot());
-//         tree.inOrder(tree.getRoot());
-//         cout << endl;
-//         tree.postOrder(tree.getRoot());
-//         cout << endl;
-//         tree.preOrder(tree.getRoot());
-//         cout << endl;
-//         cout << tree.nodeCount(tree.getRoot()) << endl;
-//
-//         tree.viewLeafL(tree.getRoot());
-//         cout << endl;
-//         tree.viewLeafH(tree.getRoot());
-//         cout << endl;
-//     }
+#ifdef time 
+    for (int te = 0; te < 1000; ++te) {
+#endif
+
+    myGraphWithMatrix::MatGraph<int> graph;
 
 
-#ifdef test
+
+
+#ifdef time 
 }
 #endif
 
@@ -80,6 +72,7 @@ int main()
     cout << "Run 10000 times: " << duration.count() << " ms" << endl;
 #endif
     return 0;
+
 }
 
 

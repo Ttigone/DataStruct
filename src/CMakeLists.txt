@@ -42,3 +42,6 @@ target_link_libraries(main PUBLIC Algorithm_header)
 
 add_subdirectory(Array)
 target_link_libraries(main PUBLIC Array_header)
+
+add_subdirectory(Graph)
+target_link_libraries(main PUBLIC Graph_header)

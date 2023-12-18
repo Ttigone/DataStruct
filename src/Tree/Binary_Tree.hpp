@@ -2,10 +2,23 @@
 #define _BINARY_TREE__HPP_
 
 #include <iostream>
+#include <string>
+#include <queue>
+#include "../Stack/Stack.hpp"
+
+/**
+ * @date 2023-11
+ *
+ * @author C3H3_Ttigone
+ * @Contact caicaishaoshan@gmail.com
+ *
+ * @brief 二叉树
+ */
 
 using std::cin;
 using std::cout;
 using std::endl;
+using std::string;
 
 
 template<class T>
@@ -28,18 +41,29 @@ public:
 public:
     TreeNode<T>* createTreePI(const std::string pre, const std::string in, size_t n);
     TreeNode<T>* createTreeIP(const std::string in, const std::string post, size_t n);  
-    void viewTree(TreeNode<T>* node);
-    void viewLeafL(TreeNode<T>* node);
-    void viewLeafH(TreeNode<T>* node);
-    constexpr TreeNode<T>* &getRoot() noexcept ;
+    void viewBeginNode(TreeNode<T>* node) const ;
+    void preOrderBeginNode(TreeNode<T>* node) ;
+    void inOrderBeginNode(TreeNode<T>* node) ;
+    void postOrderBeginNode(TreeNode<T>* node) ;
+
+    void viewLeafL(TreeNode<T>* node) const ;
+    void viewLeafH(TreeNode<T>* node) const ;
+    void viewTree() const ;
+    const string& inOrder();
+    const string& inOrderNoRecursion();
+    const string& preOrder();
+    const string& preOrderNoRecursion();
+    const string& postOrder();
+    const string& postOrderNoRecursion();
+    const string& levelOrder();
+
     constexpr bool empty();
+    constexpr TreeNode<T>* getRoot() const ;
     void destroyTree(TreeNode<T>* node);
-    bool getElem(const TreeNode<T>* node, T& element) const ;
     bool getElem(const TreeNode<T>* node, T& element) const ;
     TreeNode<T>* findNode(TreeNode<T>* node, T& element);
     bool setElem(TreeNode<T>* node, const T& element);
-    void inOrder(TreeNode<T>* node);
-    void levelOrder(void (*visit)(const T &)) const ;
+
     int nodeCount(TreeNode<T>* node);
     const TreeNode<T>* leftChild(const TreeNode<T>* node);
     const TreeNode<T>* rightChild(const TreeNode<T>* node);
@@ -52,15 +76,23 @@ public:
 
 private:
     TreeNode<T> *root;
+    string inStr;
+    string preStr;
+    string postStr;
+    string levelStr;
+
+    myListStack::Stack<TreeNode<T> *> u_stack;
+    queue<TreeNode<T> *> u_queue;
+
 };
 
 template<typename T>
-Tree<T>::Tree(void) {
+Tree<T>::Tree(void) : root(nullptr), inStr(), preStr(), postStr() {
 
 }
 
 template<typename T>
-Tree<T>::Tree(char* str) : root(nullptr) {
+Tree<T>::Tree(char* str) : Tree() {
     size_t strSize = sizeof(str);
     TreeNode<T> *St[strSize] = {nullptr}; 
     TreeNode<T> *temp = nullptr;
@@ -108,7 +140,7 @@ Tree<T>::Tree(char* str) : root(nullptr) {
 
 
 template<typename T>
-Tree<T>::Tree(std::string str) : root(nullptr) {
+Tree<T>::Tree(std::string str) : Tree() {
     
 }
 
@@ -171,25 +203,30 @@ TreeNode<T>* Tree<T>::createTreeIP(
     b->rChild = createTreeIP(in.substr(r + 1, inSize - (r + 1)), post.substr(r , postSize - (r + 1)), n - (r + 1));
     return b;
 }        
-    
+
 template <typename T>
-void Tree<T>::viewTree(TreeNode<T>* node) {
+void Tree<T>::viewBeginNode(TreeNode<T>* node) const {
     if (node) {
         cout << node->data;
         if (node->lChild || node->rChild) {
             cout << '(';
-            viewTree(node->lChild);
+            viewBeginNode(node->lChild);
             if (node->rChild) {
                 cout << ',';
-                viewTree(node->rChild);
+                viewBeginNode(node->rChild);
             }
             cout << ')';
         }
     }
 }
 
+template<typename T>
+void Tree<T>::viewTree() const {
+    viewBeginNode(getRoot());
+}
+
 template <typename T>
-void Tree<T>::viewLeafL(TreeNode<T>* node) {
+void Tree<T>::viewLeafL(TreeNode<T>* node) const {
     if (node) {
         if (node->lChild == nullptr && node->rChild == nullptr) {
             cout << node->data;
@@ -200,7 +237,7 @@ void Tree<T>::viewLeafL(TreeNode<T>* node) {
 }
 
 template<typename T>
-void Tree<T>::viewLeafH(TreeNode<T>* node) {
+void Tree<T>::viewLeafH(TreeNode<T>* node) const {
     if (node) {
         if (node->lChild == nullptr && node->rChild == nullptr) {
             cout << node->data;
@@ -211,7 +248,7 @@ void Tree<T>::viewLeafH(TreeNode<T>* node) {
 }
 
 template<typename T>
-constexpr TreeNode<T>* &Tree<T>::getRoot() noexcept {
+constexpr TreeNode<T>* Tree<T>::getRoot() const {
     return root;
 } 
 
@@ -264,35 +301,140 @@ bool Tree<T>::setElem(TreeNode<T>* node, const T& element) {
 }
 
 template<typename T>
-void Tree<T>::inOrder(TreeNode<T>* node) {
+const string& Tree<T>::inOrder() {
+    inOrderBeginNode(getRoot());
+    return inStr;
+}
+
+template<typename T>
+const string& Tree<T>::inOrderNoRecursion() {
+    inStr.clear();
+    TreeNode<T>* node = root;
+    while (!u_stack.empty() || node != nullptr) {
+        while (node != nullptr) {           // 持续将左子树入栈
+            u_stack.push(node);
+            node = node->lChild;
+        }
+        if (!u_stack.empty()) {             // 寻找右子树中的左子树
+            auto top = u_stack.top();
+            u_stack.pop();
+            inStr.push_back(top->data);
+            node = top->rChild;
+        }
+    }
+    return inStr;
+}
+
+
+template<typename T>
+void Tree<T>::inOrderBeginNode(TreeNode<T>* node) {
     if (node) {
-        inOrder(node->lChild);
-        std::cout << node->data;
-        inOrder(node->rChild);
+        inOrderBeginNode(node->lChild);
+        inStr.push_back(node->data);
+        inOrderBeginNode(node->rChild);
     }
 }
 
 template<typename T>
-void preOrder(TreeNode<T>* node) {
+void Tree<T>::preOrderBeginNode(TreeNode<T>* node) {
     if (node) {
-        std::cout << node->data;
-        preOrder(node->lChild);
-        preOrder(node->rChild);
+        preStr.push_back(node->data);
+        preOrderBeginNode(node->lChild);
+        preOrderBeginNode(node->rChild);
     }
 }
 
 template<typename T>
-void postOrder(TreeNode<T>* node) {
+void Tree<T>::postOrderBeginNode(TreeNode<T>* node) {
     if (node) {
-        postOrder(node->lChild);
-        postOrder(node->rChild);
-        cout << node->data;
+        postOrderBeginNode(node->lChild);
+        postOrderBeginNode(node->rChild);
+        postStr.push_back(node->data);
     }
 }
 
 template<typename T>
-void Tree<T>::levelOrder(void (*visit)(const T &)) const {
+const string& Tree<T>::preOrder() {
+    preOrderBeginNode(getRoot());
+    return preStr;
+}
 
+template<typename T>
+const string& Tree<T>::preOrderNoRecursion() {
+    preStr.clear();
+    TreeNode<T>* node = root;
+    if (node != nullptr) {
+        u_stack.push(node);
+        while (!u_stack.empty()) {
+            auto top = u_stack.top();
+            u_stack.pop();
+            preStr.push_back(top->data);
+            if (top->rChild != nullptr) {
+                u_stack.push(top->rChild);
+            }
+            if (top->lChild != nullptr) {
+                u_stack.push(top->lChild);
+            }
+        }
+        preStr.push_back('\n');
+    }
+    return preStr;
+}
+
+template<typename T>
+const string& Tree<T>::postOrder() {
+    postOrderBeginNode(getRoot());
+    return postStr;
+}
+
+template<typename T>
+const string& Tree<T>::postOrderNoRecursion() {
+    postStr.clear();
+    TreeNode<T>* tem = nullptr;
+    bool flags = false;
+    TreeNode<T>* node = root;
+    do {
+        while (node != nullptr) {
+            u_stack.push(node);
+            node = node->lChild;
+        }
+        tem = nullptr;
+        flags = true;
+        while (!u_stack.empty() && flags) {
+            node = u_stack.top();
+            // if (node->rChild == nullptr) {
+
+            // }
+            if (node->rChild == tem) {
+                postStr.push_back(node->data);
+                u_stack.pop();
+                tem = node;
+            } else {
+                node = node->rChild;
+                flags = false;
+            }
+        }
+    } while (!u_stack.empty());
+
+    return postStr;
+}
+
+template<typename T>
+const string& Tree<T>::levelOrder() {
+    u_queue.push(root);
+    TreeNode<T> *node = nullptr;
+    while (!u_queue.empty()) {
+        node = u_queue.front();
+        u_queue.pop();
+        levelStr.push_back(node->data);
+        if (node->lChild != nullptr) {
+            u_queue.push(node->lChild);
+        }
+        if (node->rChild != nullptr) {
+            u_queue.push(node->rChild);
+        }
+    }
+    return levelStr;
 }
 
 template<typename T>

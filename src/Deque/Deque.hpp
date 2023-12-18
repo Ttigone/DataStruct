@@ -57,17 +57,17 @@ public:
     void push_front(const T& val);
     void erase(int pos);
     void erase(int first, int last);
-    void traverse(void) const;
+    void traverse(void) const ;
     T getNext(int pos);
-    T& getItem(int pos) const;     // 根据下标获取对应的 Item
+    T& getItem(int pos) const ;     // 根据下标获取对应的 Item
+    const T& top() const ;
 
-    void traverse_for_Maze(void) const;
+    void traverse_for_Maze(void) const ;
+
 
 private:
-    T& at(int pos) const;    // 下标
-
-private:
-    const T& at(int pos) const;    // 下标
+    const T& at(int pos) const ;    // 下标
+    T at(int pos) ;    // 下标
 
 private: 
     struct DequeItem {        // 内部节点类型
@@ -232,7 +232,15 @@ void Deque<T>::traverse(void) const {
     cout << " tail";
 }
 
+// template<typename T>
+// T Deque<T>::top() {
+//     return at(size() - 1);
+// }
 
+// template<typename T>
+// T Deque<T>::at(int pos) {
+
+// }
 
 // template<typename T >
 // bool Deque<T>::get_head(T &element) const {

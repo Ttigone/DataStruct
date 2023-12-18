@@ -7,8 +7,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-<<<<<<< HEAD
-=======
 
 /**
  * @date 2023-06-15
@@ -19,31 +17,6 @@ using std::endl;
  * @brief 双向循环链表
  */
 
-namespace mydoublylist {         
-
-template<typename T>
-class DoublyLinkedList;
-
-template<typename T>
-struct DLLItem;
-
-template<typename T>
-void erase_for_Joseph(DoublyLinkedList<T>& list, int pos);
-
-template<typename T>
-void Joseph_Problem(DoublyLinkedList<T>& list, int N, int k, int m);
->>>>>>> e1d9864b8c472d7ca88b96a6525eed539c1d6fea
-
-/**
- * @date 2023-06-15
- * 
- * @author C3H3_Ttigone
- * @Contact caicaishaoshan@gmail.com
- * 
- * @brief 双向循环链表
- */
-
-<<<<<<< HEAD
 namespace mydoublylist {         
 template<typename T>
 class DoublyLinkedList;
@@ -60,8 +33,6 @@ void Joseph_Problem(DoublyLinkedList<T>& list, int N, int k, int m);
 
 namespace mydoublylist {         
     
-=======
->>>>>>> e1d9864b8c472d7ca88b96a6525eed539c1d6fea
 template<typename T>
 class DoublyLinkedList {
 public:
@@ -275,14 +246,9 @@ void DoublyLinkedList<T>::sort(void) {   // 根据 freq 排序
         cout << "Y";
     }
     int t;
-<<<<<<< HEAD
 } // template class DoublyLinkedList<T> OK
 
 
-=======
-}
-
->>>>>>> e1d9864b8c472d7ca88b96a6525eed539c1d6fea
 template<typename T>
 void erase_for_Joseph(DoublyLinkedList<T>& list, int pos) {
     if (pos < 1 || pos > list.size()) {
@@ -322,19 +288,9 @@ void Joseph_Problem(DoublyLinkedList<T>& list, int N, int k, int m) {
         mydoublylist::erase_for_Joseph(list, eraseNum);
         k = eraseNum;
     }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> e1d9864b8c472d7ca88b96a6525eed539c1d6fea
 }
 
 
 }
 
-<<<<<<< HEAD
-=======
-
-// template class DoublyLinkedList<T> OK
->>>>>>> e1d9864b8c472d7ca88b96a6525eed539c1d6fea
 #endif

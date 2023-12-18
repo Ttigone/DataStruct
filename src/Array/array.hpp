@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 /**
  * @date 2023-11-21
@@ -15,7 +16,21 @@
 
 namespace myarray {
 
+using std::cin;
+using std::cout;
+using std::endl;
 using std::vector;
+
+vector<vector<int>> helix(const int& n);
+
+void theSumAndProductOfSymmetricMatrices();
+
+void showArray(const vector<vector<int>>& array);
+
+}
+
+
+namespace myarray {
 
 vector<vector<int>> helix(const int& n) {
     vector<vector<int>> result(n, vector<int>(n, 0));
@@ -52,9 +67,117 @@ vector<vector<int>> helix(const int& n) {
     return result;
 }
 
-void theSumAndProductOfSymmetricMatrices(const vector<int>& A, const vector<int>& B) {
-    
+void theSumAndProductOfSymmetricMatrices() {
+    vector<int> A;
+    std::cout << "The A array: ";
+    char a;
+    std::string s;
+    while ((a = cin.get()) != EOF) {
+        if (a != ' ' && a != '\n') {
+            s.push_back(a);
+        } else {
+            A.push_back(stoi(s));
+            s.clear();
+        }
+        if (a == '\n') {
+            break;
+        }
+    }
 
+    vector<int> B;
+    std::cout << "The B array: ";
+    char b;
+    std::string s2;
+    while ((b = cin.get()) != EOF) {
+        if (b != ' ' && b != '\n') {
+            s2.push_back(b);
+        } else {
+            B.push_back(stoi(s2));
+            s2.clear();
+        }
+        if (b == '\n') {
+            break;
+        }
+    }
+
+    int size = A.size();
+    int level;
+    for (int i = 1; ; ++i) {
+        size -= i;
+        if (size == 0) {
+            level = i;
+            break;
+        }
+    }
+    vector<vector<int>> AllA(level, vector<int>(level));
+    vector<vector<int>> AllB(level, vector<int>(level));
+    int t = 0;
+    for (int i = 0; i < level; ++i) { 
+        for (int j = 0; j < level; ++j) {
+            if (i >= j) {
+                AllA[i][j] = A[t];
+                AllB[i][j] = B[t];
+                AllA[j][i] = AllA[i][j];
+                AllB[j][i] = AllB[i][j];
+                ++t;
+            }
+        }
+    }
+
+    cout << "Symmetric matrix A: " << endl;
+    t = 0;
+    for (int i = 0; i < level; ++i) {
+        for (int j = 0; j < level; ++j) {
+            if (i >= j) {
+                cout << A[t++] << ' ';
+            }
+        }
+        cout << endl;
+    }
+
+
+    cout << "Symmetric matrix B: " << endl;
+    t = 0;
+    for (int i = 0; i < level; ++i) {
+        for (int j = 0; j < level; ++j) {
+            if (i >= j) {
+                cout << B[t++] << ' ';
+            }
+        }
+        cout << endl;
+    }
+
+    // 求和
+    vector<vector<int>> Sum(level, vector<int>(level));
+    for (int i = 0; i < level; ++i) {
+        for (int j = 0; j < level; ++j) {
+            Sum[i][j] = AllA[i][j] + AllB[i][j];
+        }
+    }
+
+    vector<vector<int>> Product(level, vector<int>(level));
+    for (int i = 0; i < level; ++i) {
+        for (int j = 0; j < level; ++j) {
+            auto t = AllA[i][j];
+            auto t2 = AllB[i][j];
+            Product[i][j] = t * t2;
+        }
+    }
+
+    cout << "Sum: " << endl;
+    showArray(Sum);
+    cout << "Product: " << endl;
+    showArray(Product);
+}
+
+
+void showArray(const vector<vector<int>>& array) {
+    for (auto i : array) {
+        for (auto j : i) {
+            cout << j << ' ';
+        }
+        cout << endl;
+    }
 }
 
 
