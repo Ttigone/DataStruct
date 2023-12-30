@@ -39,7 +39,6 @@ using namespace std;
 
 
 
-
 int main()
 {
 // #define time
@@ -55,15 +54,32 @@ int main()
     for (int te = 0; te < 1000; ++te) {
 #endif
 
-    myGraphWithMatrix::MatGraph<int> graph;
+    myGraphWithMatrix::MatGraph<int> graphWithMatrix;
 
+    myGraphWithList::AdjvexGraph<int> graphWithList(
+        graphWithMatrix.matrixGraph(), 
+        graphWithMatrix.nodeCount(), 
+        graphWithMatrix.edgeCount()
+    );
+    cout << "number of vertex: " << graphWithList.NodeCount() << endl;
+    cout << "number of edge: " << graphWithList.EdgeCount() << endl;
+    graphWithList.showGraph();
 
+    cout << "DFS Traversal: ";
+    graphWithList.DFS();
+    cout << endl;
+    cout << "BFS Traversal: ";
+    graphWithList.BFS();
+    cout << endl;
 
+    for (int i = 1; i < graphWithList.NodeCount(); ++i) {
+        graphWithList.Dijkstra(0, i);
+        cout << endl;
+    }
 
 #ifdef time 
 }
 #endif
-
 
     cout << endl;
 #ifdef time
