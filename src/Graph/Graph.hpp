@@ -75,7 +75,6 @@ MatGraph<T>::MatGraph() : nodeCounts(0), edgeCounts(0) {
     edges.resize(nodeInfo.size(), vector<int>(nodeInfo.size(), 0));
     cout << "Input edges and weights: " << endl;
     nodeDegree.resize(nodeInfo.size());
-    // int edgeNumber = 0;
     while (1) {
         int se = 0;
         int ee = 0;
@@ -172,8 +171,8 @@ public:
     ~AdjvexGraph(void);
 
 public:
-    const int& NodeCount(void);
-    const int& EdgeCount(void);
+    const int& nodeCount(void);
+    const int& edgeCount(void);
     void degreeofVertex(void);
     void showGraph(void);
     void DFS(int v = 0);
@@ -196,6 +195,7 @@ private:
         int v, w;
     };
     vector<vector<edge>> keepEdges;
+    vector<vector<int>> t_matrix;
 
 };
 
@@ -212,12 +212,11 @@ AdjvexGraph<T>::AdjvexGraph(const vector<vector<int>>& matrix, int nodes, int ed
                 adjlist[i]->firstEdgeNode = tem;
                 ++nodeDegree[j];
                 ++nodeDegree[i];
-                // keepEdges[i].v = j;
-                // keepEdges[i].w = matrix[i][j];
                 keepEdges[i].push_back(edge(j, matrix[i][j]));
             }
         }
     }
+    this->t_matrix = matrix;
 }
 
 template <typename T>
@@ -226,12 +225,12 @@ AdjvexGraph<T>::~AdjvexGraph(void) {
 }
 
 template <typename T>
-const int& AdjvexGraph<T>::NodeCount(void) {
+const int& AdjvexGraph<T>::nodeCount(void) {
     return nodeCounts;
 }
 
 template <typename T>
-const int& AdjvexGraph<T>::EdgeCount(void) {
+const int& AdjvexGraph<T>::edgeCount(void) {
     return edgeCounts;   
 }
 
@@ -333,7 +332,7 @@ void AdjvexGraph<T>::Dijkstra(int sources, int target) {
     };
 
     dfs_path(target);
-    cout << sources << " to " << target << " length : " << length;
+    cout << sources << " to " << target << " length : " << ((length - 1 == 0) ? 1 : (length - 1));
     cout << " --- shortest path length: ";
     for (auto q : path) {
         cout << q << ' ';
@@ -342,15 +341,44 @@ void AdjvexGraph<T>::Dijkstra(int sources, int target) {
 
 template <typename T>
 void AdjvexGraph<T>::Floyd(int sources, int target) {
-    distance.assign(nodeCounts, I);
-    visited.assign(nodeCounts, 0);
-}
+    vector<vector<int>> matrix = t_matrix;
+    vector<vector<int>> path(nodeCount() * nodeCount(), vector<int>(nodeCount() * nodeCount(), 0));
+    for (int k = 0; k < nodeCount(); ++k) {
+        for (int i = 0; i < nodeCount(); ++i) {
+            for (int j = 0; j < nodeCount(); ++j) {
+                if (matrix[i][j] > matrix[i][k] + matrix[k][j]) {
+                    matrix[i][j] = matrix[i][k] + matrix[k][j];
+                    path[i][j] = k;
+                }
+            }
+        }
+    }
+
+    std::function<void(int, int)> dis_path;
+    int length = 0;
+    vector<int> q;
+    dis_path = [&](int sources, int target) {
+        if (path[sources][target] == 0) {
+            return;
+        }
+        int t = path[sources][target];
+        dis_path(sources, t);
+        ++length;
+        q.push_back(t);
+        dis_path(t, target);
+    };
+    dis_path(sources, target);
+    // cout << sources << " to " << target << " length : " << ((length - 1 == 0) ? 1 : (length - 1));
+    cout << sources << " to " << target << " length : " << ((length == 0) ? 1 : (length + 1));
+    cout << " --- shortest path length: ";
+    cout << sources << ' ';
+    for (auto i : q) {
+        cout << i << ' ';
+    }
+    cout << target;
 
 }
 
-
-
-
-
+}
 
 #endif //DS_GRAPH_HPP
